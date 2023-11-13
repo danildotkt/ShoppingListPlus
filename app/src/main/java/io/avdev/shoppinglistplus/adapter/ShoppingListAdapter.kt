@@ -3,76 +3,70 @@ package io.avdev.shoppinglistplus.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.avdev.domain.model.ShoppingList
-import io.avdev.domain.usecase.list.DeleteListUseCase
-import io.avdev.domain.usecase.list.SelectListsUseCase
 import io.avdev.shoppinglistplus.R
-import io.avdev.shoppinglistplus.anim.AdapterAnimExtension
-import io.avdev.shoppinglistplus.anim.ItemTouchHelperCallback
-import io.avdev.shoppinglistplus.databinding.ItemSlistBinding
-import io.avdev.shoppinglistplus.utils.listeners.OnAddElementClickListener
+import io.avdev.shoppinglistplus.databinding.ItemNewlistBinding
+import io.avdev.shoppinglistplus.databinding.ItemShoppingListBinding
+import io.avdev.shoppinglistplus.service.ShoppingListService
+import io.avdev.shoppinglistplus.utils.listeners.FragmentNavClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class ShoppingListAdapter(private val selectListUseCase: SelectListsUseCase, private val deleteListUseCase: DeleteListUseCase) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ShoppingListAdapter(private val listService : ShoppingListService) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var onAddElementClickListener: OnAddElementClickListener? = null
-
-    fun setOnAddElementClickListener(listener: OnAddElementClickListener) {
-        onAddElementClickListener = listener
-    }
-
-
-    private fun deleteItem(position: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            deleteListUseCase.execute(shoppingList[position])
-            withContext(Dispatchers.Main) {
-                notifyItemRemoved(position)
-                notifyDataSetChanged()
-            }
-        }
-    }
-
+    private var shoppingList = mutableListOf<ShoppingList>()
+    private var fragmentNavClickListener: FragmentNavClickListener?  = null
     private val VIEW_TYPE_ADD_ELEMENT = 0
     private val VIEW_TYPE_SHOPPING_LIST = 1
 
-    private var shoppingList = mutableListOf<ShoppingList>()
-
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            shoppingList.addAll(selectListUseCase.execute())
+            shoppingList.addAll(listService.selectLists())
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
             }
         }
     }
-
+    fun setOnAddElementClickListener(listener: FragmentNavClickListener) {
+        fragmentNavClickListener = listener
+    }
+    private fun deleteShoppingList(position: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            listService.deleteList(shoppingList[position])
+            shoppingList.removeAt(position)
+            withContext(Dispatchers.Main) {
+                notifyItemRemoved(position)
+            }
+        }
+    }
     fun addShoppingList(item: ShoppingList) {
         shoppingList.add(item)
-        val insertedIndex = shoppingList.indexOf(item)
-        notifyItemInserted(insertedIndex)
+//        itemAdapter.setList(item)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             VIEW_TYPE_ADD_ELEMENT -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_new, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_newlist, parent, false)
                 val holder = AddElementButtonHolder(view)
-//                holder.itemView.setOnClickListener {
-//                    onAddElementClickListener?.onAddElementClick()
-//                }
+                holder.itemView.setOnClickListener {
+                    fragmentNavClickListener?.setCreateListFragment()
+                }
                 holder
             }
             else -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_slist, parent, false)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.item_shopping_list, parent, false)
                 val holder = ShoppingListHolder(view)
-//                holder.itemView.setOnClickListener {
-//                }
+                holder.itemView.setOnClickListener {
+                    fragmentNavClickListener?.setProductsFragment()
+//                    itemAdapter.setList(shoppingList[holder.absoluteAdapterPosition])
+                    notifyDataSetChanged()
+                }
                 holder
             }
         }
@@ -100,21 +94,20 @@ class ShoppingListAdapter(private val selectListUseCase: SelectListsUseCase, pri
         }
     }
 
-}
-
-
-
-
-class ShoppingListHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-    private val binding = ItemSlistBinding.bind(view)
-
-    fun bind(item: ShoppingList) = with(binding) {
-        tvListName.text = item.name
-        progressBar.setProgress(40, true)
+    inner class ShoppingListHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding = ItemShoppingListBinding.bind(view)
+        fun bind(item: ShoppingList) = with(binding) {
+            tvListName.text = item.name
+            progressBar.setProgress(40, true)
+            bMore.setOnClickListener {
+                deleteShoppingList(absoluteAdapterPosition)
+            }
+        }
     }
-}
-
-class AddElementButtonHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class AddElementButtonHolder(view: View) : RecyclerView.ViewHolder(view)
 
 }
+
+
+
+

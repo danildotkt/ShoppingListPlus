@@ -10,6 +10,7 @@
     <com.yandex.mobile.ads.banner.BannerAdView
         android:id="@+id/yandex_banner"
         android:layout_width="wrap_content"
-        android:layout_height="60dp" />
+        android:layout_height="60dp"
+        />
 
 </androidx.cardview.widget.CardView>

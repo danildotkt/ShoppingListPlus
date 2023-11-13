@@ -3,29 +3,32 @@ package io.avdev.shoppinglistplus.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.components.SingletonComponent
 import io.avdev.domain.usecase.item.AddItemUseCase
 import io.avdev.domain.usecase.item.SelectItemsUseCase
+import io.avdev.domain.usecase.list.AddListUseCase
 import io.avdev.domain.usecase.list.DeleteListUseCase
 import io.avdev.domain.usecase.list.SelectListsUseCase
-import io.avdev.shoppinglistplus.adapter.ItemAdapter
-import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
 import io.avdev.shoppinglistplus.service.ShoppingItemService
 import io.avdev.shoppinglistplus.service.ShoppingListService
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AdapterModule {
+class ServiceModule {
     @Provides
     @Singleton
-    fun provideShoppingListAdapter(shoppingListService : ShoppingListService): ShoppingListAdapter {
-        return ShoppingListAdapter(shoppingListService)
+    fun provideShoppingItemService
+        (addItemUseCase: AddItemUseCase,
+         selectItemsUseCase: SelectItemsUseCase) : ShoppingItemService {
+        return ShoppingItemService(addItemUseCase, selectItemsUseCase)
     }
     @Provides
     @Singleton
-    fun provideItemAdapter(shoppingItemService : ShoppingItemService): ItemAdapter {
-        return ItemAdapter(shoppingItemService)
+    fun provideShoppingListService
+        (addListUseCase: AddListUseCase,
+         deleteListUseCase: DeleteListUseCase,
+         selectListsUseCase: SelectListsUseCase) : ShoppingListService {
+        return ShoppingListService(addListUseCase, deleteListUseCase, selectListsUseCase)
     }
 }

@@ -29,7 +29,7 @@ abstract class ShoppingListDb : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 ShoppingListDb::class.java,
-                "slp"
+                "slplus.db"
             ).build()
         }
     }

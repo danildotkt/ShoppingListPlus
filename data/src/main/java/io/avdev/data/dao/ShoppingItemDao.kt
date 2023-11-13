@@ -14,18 +14,6 @@ interface ShoppingItemDao {
     @Insert
     fun insertItem(item: ShoppingItemEntity)
 
-    @Query("SELECT * FROM items WHERE id = :id")
+    @Query("SELECT * FROM items WHERE listId = :id")
     fun selectItems(id: Int): List<ShoppingItemEntity>
-
-    @Update
-    fun updateItem(item : ShoppingItemEntity)
-
-    @Delete
-    fun deleteItem(item: ShoppingItemEntity)
-
-    @Query("UPDATE items SET isSelected = 1 WHERE id = :itemId")
-    fun setListSelected(itemId: Int)
-
-    @Query("UPDATE items SET isSelected = 0 WHERE id = :itemId")
-    fun setListUnselected(itemId: Int)
 }

@@ -4,11 +4,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.avdev.domain.model.ShoppingItem
+import io.avdev.domain.repository.ShoppingItemRepository
 import io.avdev.domain.repository.ShoppingListRepository
+import io.avdev.domain.usecase.item.AddItemUseCase
+import io.avdev.domain.usecase.item.SelectItemsUseCase
 import io.avdev.domain.usecase.list.AddListUseCase
 import io.avdev.domain.usecase.list.DeleteListUseCase
 import io.avdev.domain.usecase.list.SelectListsUseCase
-import io.avdev.domain.usecase.list.UpdateListUseCase
 import javax.inject.Singleton
 
 @Module
@@ -27,8 +30,14 @@ class UseCaseModule {
     fun provideDeleteListUseCase(repository: ShoppingListRepository) : DeleteListUseCase {
         return DeleteListUseCase(repository)
     }
+
     @Provides
-    fun provideUpdateListUseCase(repository: ShoppingListRepository) : UpdateListUseCase {
-        return UpdateListUseCase(repository)
+    fun provideAddItemUseCase(repository: ShoppingItemRepository) : AddItemUseCase {
+        return AddItemUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideSelectItemsUseCase(repository: ShoppingItemRepository) : SelectItemsUseCase {
+        return SelectItemsUseCase(repository)
     }
 }

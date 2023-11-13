@@ -12,7 +12,7 @@ import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.AdTheme
 import com.yandex.mobile.ads.common.ImpressionData
-import io.avdev.shoppinglistplus.consts.AdConst.TEST_BANNER
+import io.avdev.shoppinglistplus.consts.AdConst.YANDEX_BANNER
 import io.avdev.shoppinglistplus.databinding.FragmentYandexBannerBinding
 
 
@@ -31,7 +31,7 @@ class YandexBanner : Fragment(){
     }
 
     private fun initializeYandexBanner() = with(binding.yandexBanner){
-        setAdUnitId(TEST_BANNER)
+        setAdUnitId(YANDEX_BANNER)
         setAdSize(BannerAdSize.stickySize(context, 450))
         val adRequest = AdRequest.Builder().setPreferredTheme(AdTheme.DARK).build()
         loadAd(adRequest)
