@@ -9,8 +9,7 @@ import io.avdev.data.mapper.ShoppingListMapper
 @Entity(tableName = "lists")
 @TypeConverters(ShoppingListMapper::class)
 data class ShoppingListEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
+    @PrimaryKey
+    var id: Int,
     var name: String,
-    var itemList: List<ShoppingItemEntity> = mutableListOf()
 )

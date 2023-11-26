@@ -9,6 +9,7 @@ import io.avdev.domain.usecase.item.SelectItemsUseCase
 import io.avdev.domain.usecase.list.AddListUseCase
 import io.avdev.domain.usecase.list.DeleteListUseCase
 import io.avdev.domain.usecase.list.SelectListsUseCase
+import io.avdev.domain.usecase.list.UpdateListUseCase
 import io.avdev.shoppinglistplus.service.ShoppingItemService
 import io.avdev.shoppinglistplus.service.ShoppingListService
 import javax.inject.Singleton
@@ -25,10 +26,11 @@ class ServiceModule {
     }
     @Provides
     @Singleton
-    fun provideShoppingListService
-        (addListUseCase: AddListUseCase,
-         deleteListUseCase: DeleteListUseCase,
-         selectListsUseCase: SelectListsUseCase) : ShoppingListService {
-        return ShoppingListService(addListUseCase, deleteListUseCase, selectListsUseCase)
+    fun provideShoppingListService(
+        addListUseCase: AddListUseCase,
+        deleteListUseCase: DeleteListUseCase,
+        selectListsUseCase: SelectListsUseCase,
+        updateListUseCase : UpdateListUseCase) : ShoppingListService {
+        return ShoppingListService(addListUseCase, deleteListUseCase, selectListsUseCase, updateListUseCase)
     }
 }

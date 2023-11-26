@@ -5,7 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import io.avdev.data.mapper.ShoppingItemMapper
-import io.avdev.data.mapper.ShoppingListMapper
 
 @Entity(tableName = "items",
     foreignKeys = [ForeignKey(entity = ShoppingListEntity::class,
@@ -16,7 +15,7 @@ import io.avdev.data.mapper.ShoppingListMapper
 data class ShoppingItemEntity (
     @PrimaryKey(autoGenerate = true)
     var id : Int? = null,
-    var listId: Int? = null,
+    var listId: Int,
     var name : String,
     var isSelected : Boolean = false
 )

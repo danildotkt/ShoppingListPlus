@@ -23,4 +23,9 @@ class ShoppingListRepositoryImpl
         val entity = mapper.mapToEntity(list)
         dao.deleteShoppingList(entity)
     }
+
+    override fun updateShoppingList(list: ShoppingList) {
+        val entity = mapper.mapToEntity(list)
+        dao.updateShoppingList(entity)
+    }
 }

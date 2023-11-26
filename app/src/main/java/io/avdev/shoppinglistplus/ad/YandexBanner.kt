@@ -16,7 +16,6 @@ import io.avdev.shoppinglistplus.consts.AdConst.YANDEX_BANNER
 import io.avdev.shoppinglistplus.databinding.FragmentYandexBannerBinding
 
 
-
 class YandexBanner : Fragment(){
 
     private lateinit var binding: FragmentYandexBannerBinding

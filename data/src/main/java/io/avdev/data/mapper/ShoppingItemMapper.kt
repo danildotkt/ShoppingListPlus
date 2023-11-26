@@ -1,22 +1,10 @@
 package io.avdev.data.mapper
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 import io.avdev.data.entity.ShoppingItemEntity
 import io.avdev.domain.model.ShoppingItem
 
 class ShoppingItemMapper {
-    @TypeConverter
-    fun fromEntity(entity: ShoppingItemEntity): String {
-        val gson = Gson()
-        return gson.toJson(entity)
-    }
-
-    @TypeConverter
-    fun toEntity(json: String): ShoppingItemEntity {
-        val gson = Gson()
-        return gson.fromJson(json, ShoppingItemEntity::class.java)
-    }
     @TypeConverter
     fun mapToEntity(model: ShoppingItem): ShoppingItemEntity {
         return ShoppingItemEntity(
@@ -35,10 +23,7 @@ class ShoppingItemMapper {
             isSelected = entity.isSelected
         )
     }
-    @TypeConverter
-    fun mapToEntities(models: List<ShoppingItem>): List<ShoppingItemEntity> {
-        return models.map { mapToEntity(it) }
-    }
+
     @TypeConverter
     fun mapToModels(entities: List<ShoppingItemEntity>): List<ShoppingItem> {
         return entities.map { mapToModel(it) }

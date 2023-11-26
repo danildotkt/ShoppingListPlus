@@ -4,4 +4,7 @@
         <item name="colorControlNormal">@android:color/holo_green_light</item>
         <item name="colorControlActivated">@android:color/holo_orange_dark</item>
     </style>
+    <style name="PopupMenuStyle" parent="@android:style/Widget.PopupMenu">
+        <item name="android:background">@drawable/checkbox</item>
+    </style>
 </resources>

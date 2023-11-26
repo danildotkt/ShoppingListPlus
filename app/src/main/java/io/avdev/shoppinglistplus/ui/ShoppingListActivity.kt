@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.R
 import io.avdev.shoppinglistplus.ad.YandexBanner
 import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
@@ -11,19 +12,17 @@ import io.avdev.shoppinglistplus.databinding.ActivityAppBinding
 import io.avdev.shoppinglistplus.ui.createlist.CreateListFragment
 import io.avdev.shoppinglistplus.ui.main.MainFragment
 import io.avdev.shoppinglistplus.ui.products.ProductsFragment
-import io.avdev.shoppinglistplus.utils.listeners.FragmentNavClickListener
+import io.avdev.shoppinglistplus.ui.renamelist.RenameListFragment
+import io.avdev.shoppinglistplus.utils.extensions.navigationCounter
+import io.avdev.shoppinglistplus.utils.listeners.FragmentNavigationClickListener
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ShoppingListActivity : AppCompatActivity(), FragmentNavClickListener {
+class ShoppingListActivity : AppCompatActivity(), FragmentNavigationClickListener {
     @Inject lateinit var banner: YandexBanner
     @Inject lateinit var adapter: ShoppingListAdapter
     private lateinit var binding: ActivityAppBinding
-    private val createListFragment: CreateListFragment by lazy {
-        CreateListFragment()
-    }
-    private var backButtonCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +32,7 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavClickListener {
         setBanner()
         adapter.setOnAddElementClickListener(this)
     }
+
     private fun setBanner() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.bannerLayout, banner)
@@ -46,13 +46,19 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavClickListener {
 
     override fun setCreateListFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentLayout, createListFragment)
+            .replace(R.id.fragmentLayout, CreateListFragment())
             .commit()
     }
 
-    override fun setProductsFragment() {
+    override fun setProductsFragment(sList : ShoppingList) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentLayout, ProductsFragment())
+            .replace(R.id.fragmentLayout, ProductsFragment(sList))
+            .commit()
+    }
+
+    override fun setUpdateNameFragment(list : ShoppingList) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentLayout, RenameListFragment(list))
             .commit()
     }
 
@@ -60,16 +66,16 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavClickListener {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentLayout)
 
         if (currentFragment is MainFragment) {
-            backButtonCount++
-            if (backButtonCount == 1) {
+            navigationCounter++
+            if (navigationCounter == 1) {
                 Toast.makeText(this, "Нажмите еще раз, чтобы выйти", Toast.LENGTH_SHORT).show()
-            } else if (backButtonCount == 2) {
+            } else if (navigationCounter == 2) {
                 super.onBackPressed()
-                backButtonCount = 0
+                navigationCounter = 0
             }
         }
         else {
-            backButtonCount = 0
+            navigationCounter = 0
             setMainFragment()
         }
     }

@@ -11,40 +11,37 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/etListName"
+            android:id="@+id/etListRename"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/my_edittext"
-            android:drawableStart="@drawable/ic_shopping"
             android:drawablePadding="10dp"
             android:ems="10"
-            android:hint="Cписок покупок +"
             android:inputType="textPersonName"
             android:paddingStart="10dp"
-            android:textColor="@color/textColor"
-            android:textColorLink="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/buttonCreateList"
+            android:id="@+id/buttonRenameList"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:layout_marginBottom="30dp"
             android:backgroundTint="@color/green"
-            android:text="Создать"
+            android:text="Переименовать"
             android:textColor="@color/textColor"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/etListName"
+            app:layout_constraintEnd_toEndOf="@+id/etListRename"
             app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="@+id/etListName" />
+            app:layout_constraintStart_toStartOf="@+id/etListRename" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
