@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import io.avdev.data.entity.ShoppingListEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ShoppingListDao {
@@ -14,11 +14,11 @@ interface ShoppingListDao {
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity)
 
     @Query("Select * from lists")
-    fun getShoppingLists() : List<ShoppingListEntity>
+    fun getShoppingLists() : Flow<List<ShoppingListEntity>>
 
     @Delete
     fun deleteShoppingList(shoppingListEntity: ShoppingListEntity)
 
-    @Update
-    fun updateShoppingList(shoppingListEntity: ShoppingListEntity)
+    @Query("Update lists set name = :newName where id = :id")
+    fun renameShoppingList(id : Int, newName : String)
 }

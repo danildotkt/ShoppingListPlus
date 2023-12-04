@@ -2,15 +2,12 @@ package io.avdev.shoppinglistplus.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
 import io.avdev.shoppinglistplus.databinding.FragmentMainBinding
 import javax.inject.Inject
 
@@ -18,7 +15,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    @Inject lateinit var shoppingAdapter: ShoppingListAdapter
+    @Inject lateinit var factory: MainViewModel.Factory
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModel.provideMainViewModel(factory)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -32,7 +32,7 @@ class MainFragment : Fragment() {
 
     private fun initAdapter() = with(binding){
         rcListOfLists.layoutManager = LinearLayoutManager(context)
-        rcListOfLists.adapter = shoppingAdapter
+        rcListOfLists.adapter = viewModel.provideListAdapter()
     }
 
 }

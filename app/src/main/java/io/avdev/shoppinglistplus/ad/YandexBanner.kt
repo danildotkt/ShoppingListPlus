@@ -12,7 +12,7 @@ import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.AdTheme
 import com.yandex.mobile.ads.common.ImpressionData
-import io.avdev.shoppinglistplus.consts.AdConst.YANDEX_BANNER
+import io.avdev.shoppinglistplus.ad.ConstAd.YANDEX_BANNER
 import io.avdev.shoppinglistplus.databinding.FragmentYandexBannerBinding
 
 

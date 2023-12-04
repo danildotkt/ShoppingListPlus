@@ -1,6 +1,0 @@
-<resources>
-    <style name="Base.Theme.SimpleShoppingList" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/background</item>
-        <item name="android:windowBackground">@color/background</item>
-    </style>
-</resources>

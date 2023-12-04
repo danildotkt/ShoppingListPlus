@@ -27,4 +27,6 @@ class ShoppingListMapper {
         return entities.map { mapToModel(it) }
     }
 
+
+
 }

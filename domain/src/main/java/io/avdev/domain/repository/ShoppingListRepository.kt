@@ -1,10 +1,11 @@
 package io.avdev.domain.repository
 
 import io.avdev.domain.model.ShoppingList
+import kotlinx.coroutines.flow.Flow
 
 interface ShoppingListRepository {
-    fun createShoppingList(list: ShoppingList)
-    fun selectShoppingLists() : List<ShoppingList>
-    fun deleteShoppingList(list : ShoppingList)
-    fun updateShoppingList(list : ShoppingList)
+    suspend fun createShoppingList(list : ShoppingList)
+    fun getShoppingLists() : Flow<List<ShoppingList>>
+    suspend fun deleteShoppingList(list : ShoppingList)
+    suspend fun renameShoppingList(id : Int, newName : String)
 }

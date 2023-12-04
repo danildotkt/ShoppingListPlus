@@ -8,21 +8,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.databinding.FragmentRenameListBinding
-import io.avdev.shoppinglistplus.service.ShoppingListService
 import io.avdev.shoppinglistplus.utils.extensions.moveToStartFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RenameListFragment(val list : ShoppingList) : Fragment() {
     private lateinit var binding: FragmentRenameListBinding
-    @Inject lateinit var listService : ShoppingListService
-
+    @Inject lateinit var factory: RenameListViewModel.Factory
+    private val viewModel: RenameListViewModel by viewModels {
+        RenameListViewModel.provideRenameListViewModel(factory)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentRenameListBinding.inflate(inflater, container, false)
@@ -43,29 +42,19 @@ class RenameListFragment(val list : ShoppingList) : Fragment() {
     private fun onClickCreate() = with(binding){
         initKeyboard()
         buttonRenameList.setOnClickListener {
-            renameList(etListRename.text.toString())
+            viewModel.renameList(etListRename.text.toString(), list)
             moveToStartFragment()
         }
     }
     private fun onClickDone() = with(binding) {
         etListRename.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                renameList(etListRename.text.toString())
+                viewModel.renameList(etListRename.text.toString(), list)
                 moveToStartFragment()
                 true
             } else {
                 false
             }
-        }
-    }
-
-    private fun renameList(newName : String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            list.name = newName
-            if(newName == "") {
-                list.name = "Новый список покупок +"
-            }
-            listService.updateList(list)
         }
     }
 

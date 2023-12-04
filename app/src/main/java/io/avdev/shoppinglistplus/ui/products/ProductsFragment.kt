@@ -6,23 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.avdev.domain.model.ShoppingItem
 import io.avdev.domain.model.ShoppingList
+import io.avdev.domain.usecase.item.CreateItemUseCase
 import io.avdev.shoppinglistplus.adapter.ItemAdapter
 import io.avdev.shoppinglistplus.databinding.FragmentProductsBinding
-import io.avdev.shoppinglistplus.service.ShoppingItemService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProductsFragment(val shoppingList : ShoppingList) : Fragment() {
-    private lateinit var binding: FragmentProductsBinding
-    @Inject lateinit var itemService: ShoppingItemService
+    private lateinit var binding : FragmentProductsBinding
     private lateinit var itemAdapter : ItemAdapter
+    @Inject lateinit var createItemUseCase : CreateItemUseCase
+    @Inject lateinit var factory : ProductsViewModel.Factory
+
+    private val viewModel: ProductsViewModel by viewModels {
+        ProductsViewModel.providesProductsViewModel(factory)
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentProductsBinding.inflate(inflater, container, false)
@@ -38,8 +41,7 @@ class ProductsFragment(val shoppingList : ShoppingList) : Fragment() {
         etProduct.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val productName = etProduct.text.toString()
-                val newItem = ShoppingItem(listId = shoppingList.id, name = productName)
-                addProduct(newItem)
+                itemAdapter.addItem(productName)
                 etProduct.text = null
                 true
             } else {
@@ -47,18 +49,10 @@ class ProductsFragment(val shoppingList : ShoppingList) : Fragment() {
             }
         }
     }
-    private fun addProduct(item: ShoppingItem) {
-        itemAdapter.addItem(item)
-        saveItem(item)
-    }
-    private fun saveItem(item: ShoppingItem) {
-        CoroutineScope(Dispatchers.IO).launch {
-            itemService.addItem(item)
-        }
-    }
+
     private fun initRcView() = with(binding){
         rcProducts.layoutManager = LinearLayoutManager(context)
-        itemAdapter = ItemAdapter(this@ProductsFragment, itemService)
+        itemAdapter = viewModel.provideItemAdapter(this@ProductsFragment)
         rcProducts.adapter = itemAdapter
     }
 }

@@ -2,8 +2,10 @@
 <resources>
     <color name="textColor">#FFFFFF</color>
     <color name="green">#2DBE64</color>
+    <color name="red">#D21E19</color>
 
     <color name="background">#121212</color>
     <color name="background2">#1C1C1C</color>
     <color name="background3">#333335</color>
+
 </resources>

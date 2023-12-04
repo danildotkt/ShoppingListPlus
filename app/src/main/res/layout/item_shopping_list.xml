@@ -35,10 +35,11 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
             android:backgroundTint="@color/background"
             android:progressTint="@color/green"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/bMore"
+            app:layout_constraintEnd_toStartOf="@+id/tvSelectedItem"
             app:layout_constraintStart_toStartOf="@+id/tvListName"
             app:layout_constraintTop_toBottomOf="@+id/tvListName" />
 
@@ -46,11 +47,43 @@
             android:id="@+id/bMore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="4dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_more" />
+
+        <TextView
+            android:id="@+id/tvSelectedItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintEnd_toStartOf="@+id/tvSlash"
+            app:layout_constraintTop_toTopOf="@+id/progressBar" />
+
+        <TextView
+            android:id="@+id/tvItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSlash"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSlash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:text="/"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSelectedItem"
+            app:layout_constraintEnd_toStartOf="@+id/tvItems" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

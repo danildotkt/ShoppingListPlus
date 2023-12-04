@@ -7,22 +7,24 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.R
 import io.avdev.shoppinglistplus.ad.YandexBanner
-import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
+import io.avdev.shoppinglistplus.ad.YandexInterstitial
+import io.avdev.shoppinglistplus.adapter.SListAdapter
 import io.avdev.shoppinglistplus.databinding.ActivityAppBinding
 import io.avdev.shoppinglistplus.ui.createlist.CreateListFragment
 import io.avdev.shoppinglistplus.ui.main.MainFragment
 import io.avdev.shoppinglistplus.ui.products.ProductsFragment
 import io.avdev.shoppinglistplus.ui.renamelist.RenameListFragment
-import io.avdev.shoppinglistplus.utils.extensions.navigationCounter
-import io.avdev.shoppinglistplus.utils.listeners.FragmentNavigationClickListener
+import io.avdev.shoppinglistplus.utils.listeners.FragmentNavigation
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ShoppingListActivity : AppCompatActivity(), FragmentNavigationClickListener {
+class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     @Inject lateinit var banner: YandexBanner
-    @Inject lateinit var adapter: ShoppingListAdapter
+    @Inject lateinit var interstitialAd : YandexInterstitial
+    @Inject lateinit var adapter : SListAdapter
     private lateinit var binding: ActivityAppBinding
+    private var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,26 +58,30 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigationClickListene
             .commit()
     }
 
-    override fun setUpdateNameFragment(list : ShoppingList) {
+    override fun setUpdateNameFragment(sList : ShoppingList) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentLayout, RenameListFragment(list))
+            .replace(R.id.fragmentLayout, RenameListFragment(sList))
             .commit()
+    }
+
+    override fun setInterstitialAd() {
+        interstitialAd.loadInterstitialAd(this)
     }
 
     override fun onBackPressed() {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentLayout)
 
         if (currentFragment is MainFragment) {
-            navigationCounter++
-            if (navigationCounter == 1) {
+            counter++
+            if (counter == 1) {
                 Toast.makeText(this, "Нажмите еще раз, чтобы выйти", Toast.LENGTH_SHORT).show()
-            } else if (navigationCounter == 2) {
+            } else if (counter == 2) {
                 super.onBackPressed()
-                navigationCounter = 0
+                counter = 0
             }
         }
         else {
-            navigationCounter = 0
+            counter = 0
             setMainFragment()
         }
     }

@@ -6,42 +6,73 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.avdev.domain.repository.ShoppingItemRepository
 import io.avdev.domain.repository.ShoppingListRepository
-import io.avdev.domain.usecase.item.AddItemUseCase
-import io.avdev.domain.usecase.item.SelectItemsUseCase
-import io.avdev.domain.usecase.list.AddListUseCase
+import io.avdev.domain.usecase.item.ClearSelectionUseCase
+import io.avdev.domain.usecase.item.CreateItemUseCase
+import io.avdev.domain.usecase.item.GetItemsByListIdUseCase
+import io.avdev.domain.usecase.item.GetSelectedItemCountUseCase
+import io.avdev.domain.usecase.item.GetTotalItemCountUseCase
+import io.avdev.domain.usecase.item.UpdateItemSelectionUseCase
+import io.avdev.domain.usecase.list.CreateListUseCase
 import io.avdev.domain.usecase.list.DeleteListUseCase
-import io.avdev.domain.usecase.list.SelectListsUseCase
-import io.avdev.domain.usecase.list.UpdateListUseCase
+import io.avdev.domain.usecase.list.GetListsUseCase
+import io.avdev.domain.usecase.list.RenameListUseCase
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class UseCaseModule {
+object UseCaseModule {
 
     @Provides
-    fun provideAddListUseCase(repository: ShoppingListRepository) : AddListUseCase {
-        return AddListUseCase(repository)
+    @Singleton
+    fun provideCreateListUseCase(repository: ShoppingListRepository) : CreateListUseCase {
+        return CreateListUseCase(repository)
     }
     @Provides
-    fun provideSelectListsUseCase(repository: ShoppingListRepository): SelectListsUseCase {
-        return SelectListsUseCase(repository)
+    @Singleton
+    fun provideGetListsUseCase(repository: ShoppingListRepository): GetListsUseCase {
+        return GetListsUseCase(repository)
     }
     @Provides
+    @Singleton
     fun provideDeleteListUseCase(repository: ShoppingListRepository) : DeleteListUseCase {
         return DeleteListUseCase(repository)
     }
     @Provides
-    fun provideUpdateListUseCase(repository: ShoppingListRepository) : UpdateListUseCase {
-        return UpdateListUseCase(repository)
+    @Singleton
+    fun provideRenameListUseCase(repository: ShoppingListRepository) : RenameListUseCase {
+        return RenameListUseCase(repository)
     }
 
 
     @Provides
-    fun provideAddItemUseCase(repository: ShoppingItemRepository) : AddItemUseCase {
-        return AddItemUseCase(repository)
+    @Singleton
+    fun provideCreateItemUseCase(repository: ShoppingItemRepository) : CreateItemUseCase {
+        return CreateItemUseCase(repository)
     }
     @Provides
-    fun provideSelectItemsUseCase(repository: ShoppingItemRepository) : SelectItemsUseCase {
-        return SelectItemsUseCase(repository)
+    @Singleton
+    fun provideGetItemsByListIdUseCase(repository: ShoppingItemRepository) : GetItemsByListIdUseCase {
+        return GetItemsByListIdUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideUpdateItemSelectionUseCase(repository: ShoppingItemRepository) : UpdateItemSelectionUseCase {
+        return UpdateItemSelectionUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideClearSelectionUseCase(repository: ShoppingItemRepository) : ClearSelectionUseCase {
+        return ClearSelectionUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideGetSelectedItemCountUseCase(repository: ShoppingItemRepository) : GetSelectedItemCountUseCase {
+        return GetSelectedItemCountUseCase(repository)
+    }
+    @Provides
+    @Singleton
+    fun provideGetTotalItemCountUseCase(repository: ShoppingItemRepository) : GetTotalItemCountUseCase {
+        return GetTotalItemCountUseCase(repository)
     }
 
 }
