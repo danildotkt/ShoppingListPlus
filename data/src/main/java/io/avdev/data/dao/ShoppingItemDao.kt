@@ -13,7 +13,7 @@ interface ShoppingItemDao {
     fun insertItem(item: ShoppingItemEntity)
 
     @Query("Select * from items where listId = :id")
-    fun getItemsByListId(id : Int): List<ShoppingItemEntity>
+    fun getItemsByListId(id : Int): Flow<List<ShoppingItemEntity>>
 
     @Query("Update items set isSelected = :isSelected where id = :itemId")
     fun updateItemSelection(itemId : Int, isSelected : Boolean)

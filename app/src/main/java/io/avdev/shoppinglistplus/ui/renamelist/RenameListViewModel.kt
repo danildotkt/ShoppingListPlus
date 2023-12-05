@@ -29,12 +29,12 @@ class RenameListViewModel @AssistedInject constructor(private val  renameListUse
     }
 
     fun renameList(newName : String, list : ShoppingList) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             list.name = newName
             if(newName == "") {
                 list.name = "Новый список покупок +"
             }
-            renameListUseCase.execute(list.id, newName)
+            renameListUseCase.execute(list.id, list.name)
         }
     }
 }

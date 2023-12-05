@@ -49,7 +49,8 @@ class RenameListFragment(val list : ShoppingList) : Fragment() {
     private fun onClickDone() = with(binding) {
         etListRename.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.renameList(etListRename.text.toString(), list)
+                val newName = etListRename.text.toString()
+                viewModel.renameList(newName, list)
                 moveToStartFragment()
                 true
             } else {

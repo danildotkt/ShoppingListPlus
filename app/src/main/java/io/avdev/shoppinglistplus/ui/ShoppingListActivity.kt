@@ -42,24 +42,28 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     }
     private fun setMainFragment() {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
             .replace(R.id.fragmentLayout, MainFragment())
             .commit()
     }
 
     override fun setCreateListFragment() {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
             .replace(R.id.fragmentLayout, CreateListFragment())
             .commit()
     }
 
     override fun setProductsFragment(sList : ShoppingList) {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
             .replace(R.id.fragmentLayout, ProductsFragment(sList))
             .commit()
     }
 
     override fun setUpdateNameFragment(sList : ShoppingList) {
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
             .replace(R.id.fragmentLayout, RenameListFragment(sList))
             .commit()
     }

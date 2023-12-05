@@ -5,6 +5,7 @@ import io.avdev.data.mapper.ShoppingItemMapper
 import io.avdev.domain.model.ShoppingItem
 import io.avdev.domain.repository.ShoppingItemRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ShoppingItemRepositoryImpl(
     private val dao: ShoppingItemDao,
@@ -15,9 +16,8 @@ class ShoppingItemRepositoryImpl(
         dao.insertItem(entity)
     }
 
-    override suspend fun getItemsByListId(id: Int): List<ShoppingItem> {
-        val entityList = dao.getItemsByListId(id)
-        return mapper.mapToModels(entityList)
+    override fun getItemsByListId(id: Int): Flow<List<ShoppingItem>> {
+        return dao.getItemsByListId(id).map { mapper.mapToModels(it) }
     }
 
     override suspend fun updateItemSelection(itemId: Int, isSelected: Boolean) {

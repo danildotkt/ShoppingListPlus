@@ -9,20 +9,17 @@ import io.avdev.data.dao.ShoppingListDao
 import io.avdev.data.entity.ShoppingItemEntity
 import io.avdev.data.entity.ShoppingListEntity
 
-@Database(entities = [ShoppingListEntity::class, ShoppingItemEntity::class], version = 1)
+@Database(entities = [ShoppingListEntity::class, ShoppingItemEntity::class], version = 2)
 abstract class ShoppingListDb : RoomDatabase() {
 
     abstract fun getShoppingItemDao(): ShoppingItemDao
     abstract fun getShoppingListDao(): ShoppingListDao
 
     companion object {
-        @Volatile
         private var instance: ShoppingListDb? = null
 
         fun getDataBase(context: Context): ShoppingListDb {
-            return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
-            }
+            return instance ?: buildDatabase(context).also { instance = it }
         }
 
         private fun buildDatabase(context: Context): ShoppingListDb {

@@ -45,13 +45,12 @@ dependencies {
     implementation(project(":domain"))
 
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     kapt("androidx.room:room-compiler:2.6.1:")
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
-
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    kapt("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 

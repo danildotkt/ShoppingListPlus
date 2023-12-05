@@ -31,15 +31,14 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
     private val clearSelectionUseCase: ClearSelectionUseCase) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var shoppingLists = mutableListOf<ShoppingList>()
-    private var fragmentNavigation: FragmentNavigation? = null
+    private lateinit var fragmentNavigation: FragmentNavigation
 
 
     init {
         val flow = getListsUseCase.execute()
         flow.onEach { newList ->
             shoppingLists.addAll(newList.filter { !shoppingLists.contains(it) })
-        }.launchIn(CoroutineScope(Dispatchers.IO))
-
+        }.launchIn(CoroutineScope(Dispatchers.Default))
     }
 
     fun setOnAddElementClickListener(listener: FragmentNavigation) {
@@ -51,12 +50,12 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
         fun bind(item: ShoppingList) = with(binding) {
             tvListName.text = item.name
             getProgress(item)
+            loadInterstitialAd(item)
             bMore.setOnClickListener { showPopupMenu(it) }
         }
 
-
         private fun getProgress(list: ShoppingList) {
-            CoroutineScope(Dispatchers.IO).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 val id = list.id
                 val selectedItemCountFlow = getSelectedItemCountUseCase.execute(id)
                 val totalItemCountFlow = getTotalItemCountUseCase.execute(id)
@@ -68,12 +67,25 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
                         binding.progressBar.setProgress(selectedItemCount, true)
                         binding.tvItems.text = totalItemCount.toString()
                     }
-                }.collect{ }
+                }.collect{}
             }
         }
 
+        private fun loadInterstitialAd(list : ShoppingList) {
+            val selectedItemsSet = HashSet<Int>()
 
-
+            CoroutineScope(Dispatchers.Default).launch {
+                val id = list.id
+                val selectedItemCountFlow = getSelectedItemCountUseCase.execute(id)
+                selectedItemCountFlow.collect{ selectedItemCount ->
+                    selectedItemsSet.add(selectedItemCount)
+                    if (selectedItemsSet.size >= 25) {
+                        fragmentNavigation.setInterstitialAd()
+                        selectedItemsSet.clear()
+                    }
+                }
+            }
+        }
 
         private fun showPopupMenu(view: View) {
             val popupMenu = PopupMenu(view.context, view)
@@ -85,7 +97,7 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
         override fun onMenuItemClick(item: MenuItem): Boolean {
             return when (item.itemId) {
                 R.id.menu_rename -> {
-                    fragmentNavigation?.setUpdateNameFragment(shoppingLists[absoluteAdapterPosition])
+                    fragmentNavigation.setUpdateNameFragment(shoppingLists[absoluteAdapterPosition])
                     true
                 }
                 R.id.menu_reset -> {
@@ -101,7 +113,7 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
         }
     }
     private fun deleteShoppingList(position: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             deleteListUseCase.execute(shoppingLists[position])
             withContext(Dispatchers.Main) {
                 shoppingLists.removeAt(position)
@@ -110,7 +122,7 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
         }
     }
     private fun clearShoppingListFlags(position: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             clearSelectionUseCase.execute(shoppingLists[position].id)
             withContext(Dispatchers.Main) {
                 notifyItemChanged(position)
@@ -130,7 +142,7 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_newlist, parent, false)
                 val holder = AddElementButtonHolder(view)
                 holder.itemView.setOnClickListener {
-                    fragmentNavigation?.setCreateListFragment()
+                    fragmentNavigation.setCreateListFragment()
                 }
                 holder
             }
@@ -138,7 +150,7 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_shopping_list, parent, false)
                 val holder = ShoppingListHolder(view)
                 holder.itemView.setOnClickListener {
-                    fragmentNavigation?.setProductsFragment(shoppingLists[holder.absoluteAdapterPosition])
+                    fragmentNavigation.setProductsFragment(shoppingLists[holder.absoluteAdapterPosition])
                 }
                 holder
             }

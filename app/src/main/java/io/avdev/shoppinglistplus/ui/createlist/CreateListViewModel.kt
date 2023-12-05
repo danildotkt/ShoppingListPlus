@@ -33,7 +33,7 @@ class CreateListViewModel @AssistedInject constructor(
     fun createShoppingList(name : String) {
         val newName = nameValidate(name)
         val shoppingList = ShoppingList(id = generateId(), name = newName)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             try {
                 createListUseCase.execute(shoppingList)
             } catch (e: Exception) {
