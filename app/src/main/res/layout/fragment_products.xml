@@ -18,6 +18,7 @@
             android:background="@drawable/my_edittext"
             android:fontFamily="@font/roboto"
             android:hint="Новый продукт + "
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:paddingStart="10dp"
             android:textColor="@color/textColor"
