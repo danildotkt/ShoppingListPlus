@@ -1,12 +1,10 @@
 package io.avdev.shoppinglistplus.ui.renamelist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,21 +14,23 @@ import io.avdev.shoppinglistplus.utils.extensions.moveToStartFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RenameListFragment(val list : ShoppingList) : Fragment() {
-    private lateinit var binding: FragmentRenameListBinding
+class RenameListFragment(val shoppingList: ShoppingList ) : Fragment() {
+    private var _binding: FragmentRenameListBinding? = null
     @Inject lateinit var factory: RenameListViewModel.Factory
     private val viewModel: RenameListViewModel by viewModels {
         RenameListViewModel.provideRenameListViewModel(factory)
     }
 
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentRenameListBinding.inflate(inflater, container, false)
+        _binding = FragmentRenameListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.etListRename.setText(list.name)
+        binding.etListRename.setText(shoppingList.name)
         setButtons()
     }
 
@@ -40,9 +40,8 @@ class RenameListFragment(val list : ShoppingList) : Fragment() {
     }
 
     private fun onClickCreate() = with(binding){
-        initKeyboard()
         buttonRenameList.setOnClickListener {
-            viewModel.renameList(etListRename.text.toString(), list)
+            viewModel.renameList(etListRename.text.toString(), shoppingList)
             moveToStartFragment()
         }
     }
@@ -50,7 +49,7 @@ class RenameListFragment(val list : ShoppingList) : Fragment() {
         etListRename.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val newName = etListRename.text.toString()
-                viewModel.renameList(newName, list)
+                viewModel.renameList(newName, shoppingList)
                 moveToStartFragment()
                 true
             } else {
@@ -59,9 +58,8 @@ class RenameListFragment(val list : ShoppingList) : Fragment() {
         }
     }
 
-    private fun initKeyboard() = with(binding){
-        etListRename.requestFocus()
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(etListRename, InputMethodManager.SHOW_IMPLICIT)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

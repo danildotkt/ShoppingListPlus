@@ -32,7 +32,7 @@ class YandexBanner : Fragment(){
     private fun initializeYandexBanner() = with(binding.yandexBanner){
         setAdUnitId(YANDEX_BANNER)
         setAdSize(BannerAdSize.stickySize(context, 450))
-        val adRequest = AdRequest.Builder().setPreferredTheme(AdTheme.DARK).build()
+        val adRequest = AdRequest.Builder().setPreferredTheme(AdTheme.LIGHT).build()
         loadAd(adRequest)
         bannerEventListener()
     }

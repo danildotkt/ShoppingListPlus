@@ -8,8 +8,5 @@
         <item name="colorPrimary">@color/green</item>
         <item name="colorOnPrimary">@color/green</item>
         <item name="colorContainer">@color/green</item>
-
-        <item name="popupMenuBackground">@drawable/menu_background</item>
     </style>
-
 </resources>

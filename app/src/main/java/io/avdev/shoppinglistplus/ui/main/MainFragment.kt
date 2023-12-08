@@ -14,14 +14,16 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-    private lateinit var binding: FragmentMainBinding
+    private var _binding: FragmentMainBinding? = null
     @Inject lateinit var factory: MainViewModel.Factory
     private val viewModel: MainViewModel by viewModels {
         MainViewModel.provideMainViewModel(factory)
     }
 
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,8 +33,13 @@ class MainFragment : Fragment() {
     }
 
     private fun initAdapter() = with(binding){
+        val adapter = viewModel.provideListAdapter()
         rcListOfLists.layoutManager = LinearLayoutManager(context)
-        rcListOfLists.adapter = viewModel.provideListAdapter()
+        rcListOfLists.adapter = adapter
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

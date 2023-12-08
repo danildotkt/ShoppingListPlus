@@ -9,7 +9,7 @@ import io.avdev.data.dao.ShoppingListDao
 import io.avdev.data.entity.ShoppingItemEntity
 import io.avdev.data.entity.ShoppingListEntity
 
-@Database(entities = [ShoppingListEntity::class, ShoppingItemEntity::class], version = 2)
+@Database(entities = [ShoppingListEntity::class, ShoppingItemEntity::class], version = 1)
 abstract class ShoppingListDb : RoomDatabase() {
 
     abstract fun getShoppingItemDao(): ShoppingItemDao

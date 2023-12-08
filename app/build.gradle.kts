@@ -6,12 +6,13 @@ plugins {
 }
 
 android {
+
     namespace = "io.avdev.shoppinglistplus"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "io.avdev.shoppinglistplus"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -45,13 +46,11 @@ dependencies {
     implementation(project(":domain"))
 
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     kapt("androidx.room:room-compiler:2.6.1:")
 
     implementation("androidx.fragment:fragment-ktx:1.6.2")
-
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     implementation("com.google.dagger:hilt-android:2.48.1")

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
@@ -16,19 +17,19 @@ import io.avdev.shoppinglistplus.databinding.FragmentProductsBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductsFragment(val shoppingList : ShoppingList) : Fragment() {
-    private lateinit var binding : FragmentProductsBinding
+class ProductsFragment(var shoppingList : ShoppingList) : Fragment() {
+    private var _binding : FragmentProductsBinding? = null
     private lateinit var itemAdapter : ItemAdapter
     @Inject lateinit var createItemUseCase : CreateItemUseCase
     @Inject lateinit var factory : ProductsViewModel.Factory
-
     private val viewModel: ProductsViewModel by viewModels {
         ProductsViewModel.providesProductsViewModel(factory)
     }
 
+    private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentProductsBinding.inflate(inflater, container, false)
+        _binding = FragmentProductsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -54,5 +55,12 @@ class ProductsFragment(val shoppingList : ShoppingList) : Fragment() {
         rcProducts.layoutManager = LinearLayoutManager(context)
         itemAdapter = viewModel.provideItemAdapter(this@ProductsFragment)
         rcProducts.adapter = itemAdapter
+        val itemAnimator = DefaultItemAnimator()
+        rcProducts.itemAnimator = itemAnimator
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

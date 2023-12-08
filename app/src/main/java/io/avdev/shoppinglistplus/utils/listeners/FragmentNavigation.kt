@@ -5,6 +5,5 @@ import io.avdev.domain.model.ShoppingList
 interface FragmentNavigation {
     fun setCreateListFragment()
     fun setProductsFragment(sList : ShoppingList)
-    fun setUpdateNameFragment(sList : ShoppingList)
-    fun setInterstitialAd()
+    fun setRenameListFragment(sList : ShoppingList)
 }

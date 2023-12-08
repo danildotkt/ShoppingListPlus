@@ -16,14 +16,16 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreateListFragment : Fragment() {
-    private lateinit var binding: FragmentCreateListBinding
-    @Inject lateinit var factory : CreateListViewModel.Factory
+    private var _binding: FragmentCreateListBinding? = null
+    @Inject lateinit var factory: CreateListViewModel.Factory
     private val viewModel: CreateListViewModel by viewModels {
         CreateListViewModel.provideCreateListViewModel(factory)
     }
 
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentCreateListBinding.inflate(inflater, container, false)
+        _binding = FragmentCreateListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,6 +44,11 @@ class CreateListFragment : Fragment() {
             handleListCreation()
         }
     }
+    private fun initKeyboard() = with(binding){
+        etListName.requestFocus()
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(etListName, InputMethodManager.SHOW_IMPLICIT)
+    }
     private fun onClickDoneListener() = with(binding) {
         etListName.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -58,12 +65,8 @@ class CreateListFragment : Fragment() {
         moveToStartFragment()
     }
 
-    private fun initKeyboard() = with(binding){
-        etListName.requestFocus()
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(etListName, InputMethodManager.SHOW_IMPLICIT)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
-
-
-
 }

@@ -29,19 +29,23 @@ class ItemAdapter(getItemsByListIdUseCase: GetItemsByListIdUseCase,
 ) : ListAdapter<ShoppingItem, ItemAdapter.Holder>(ItemDiffCallback()) {
 
     private val itemList = mutableListOf<ShoppingItem>()
+    private lateinit var unselectedItems: List<ShoppingItem>
+    private lateinit var selectedItems: List<ShoppingItem>
 
     init {
         val listId = fragment.shoppingList.id
         val flow = getItemsByListIdUseCase.execute(listId)
         CoroutineScope(Dispatchers.Default).launch {
             flow.collect { items ->
-                val unselectedItems = items.filter { !it.isSelected }.sortedBy { it.name }
-                val selectedItems = items.filter { it.isSelected }.sortedBy { it.name }
-                itemList.clear()
-                itemList.addAll(unselectedItems)
-                itemList.addAll(selectedItems)
-                withContext(Dispatchers.Main) {
-                    notifyDataSetChanged()
+                withContext(Dispatchers.IO){
+                    unselectedItems = (items.filter { !it.isSelected  })
+                    selectedItems = items.filter { it.isSelected }
+                    itemList.clear()
+                    itemList.addAll(unselectedItems)
+                    itemList.addAll(selectedItems)
+                    withContext(Dispatchers.Main) {
+                        notifyDataSetChanged()
+                    }
                 }
             }
         }
@@ -56,6 +60,9 @@ class ItemAdapter(getItemsByListIdUseCase: GetItemsByListIdUseCase,
             )
             itemList.add(newItem)
             createItemUseCase.execute(newItem)
+            withContext(Dispatchers.Main) {
+                unselectedItems.size + 1
+            }
         }
     }
 
@@ -78,7 +85,7 @@ class ItemAdapter(getItemsByListIdUseCase: GetItemsByListIdUseCase,
                 }
                 checkBox2.setOnCheckedChangeListener(null)
                 checkBox2.isChecked = item.isSelected
-                checkBox2.setOnCheckedChangeListener { _, isChecked ->
+                checkBox2.setOnCheckedChangeListener { b, isChecked ->
                     item.isSelected = isChecked
                     updateItemSelection(item, isChecked)
                 }
@@ -104,7 +111,7 @@ class ItemAdapter(getItemsByListIdUseCase: GetItemsByListIdUseCase,
 
     class ItemDiffCallback : DiffUtil.ItemCallback<ShoppingItem>() {
         override fun areItemsTheSame(oldItem: ShoppingItem, newItem: ShoppingItem): Boolean {
-            return oldItem.isSelected == newItem.isSelected
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ShoppingItem, newItem: ShoppingItem): Boolean {

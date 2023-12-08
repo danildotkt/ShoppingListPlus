@@ -21,6 +21,7 @@
             android:drawableStart="@drawable/ic_add_shopping"
             android:drawablePadding="10dp"
             android:ems="10"
+            android:fontFamily="@font/roboto"
             android:hint="Cписок покупок +"
             android:inputType="textPersonName"
             android:paddingStart="10dp"

@@ -1,10 +1,15 @@
 package io.avdev.shoppinglistplus.adapter
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
+import android.view.Window
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.avdev.domain.model.ShoppingList
 import io.avdev.domain.usecase.item.ClearSelectionUseCase
@@ -33,7 +38,6 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
     private var shoppingLists = mutableListOf<ShoppingList>()
     private lateinit var fragmentNavigation: FragmentNavigation
 
-
     init {
         val flow = getListsUseCase.execute()
         flow.onEach { newList ->
@@ -45,13 +49,12 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
         fragmentNavigation = listener
     }
 
-    inner class ShoppingListHolder(view: View) : RecyclerView.ViewHolder(view), PopupMenu.OnMenuItemClickListener {
+    inner class ShoppingListHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemShoppingListBinding.bind(view)
         fun bind(item: ShoppingList) = with(binding) {
             tvListName.text = item.name
             getProgress(item)
-            loadInterstitialAd(item)
-            bMore.setOnClickListener { showPopupMenu(it) }
+            bMore.setOnClickListener { showDialog(item) }
         }
 
         private fun getProgress(list: ShoppingList) {
@@ -67,49 +70,59 @@ class SListAdapter (getListsUseCase: GetListsUseCase,
                         binding.progressBar.setProgress(selectedItemCount, true)
                         binding.tvItems.text = totalItemCount.toString()
                     }
-                }.collect{}
+                }.collect {}
             }
         }
 
-        private fun loadInterstitialAd(list : ShoppingList) {
-            val selectedItemsSet = HashSet<Int>()
+        private fun showDialog(item: ShoppingList) {
+            val dialog = createDialog()
+            setupDialogViews(dialog, item)
+            setListeners(dialog)
+            showDialogWithAnimation(dialog)
+        }
 
-            CoroutineScope(Dispatchers.Default).launch {
-                val id = list.id
-                val selectedItemCountFlow = getSelectedItemCountUseCase.execute(id)
-                selectedItemCountFlow.collect{ selectedItemCount ->
-                    selectedItemsSet.add(selectedItemCount)
-                    if (selectedItemsSet.size >= 25) {
-                        fragmentNavigation.setInterstitialAd()
-                        selectedItemsSet.clear()
-                    }
-                }
+        private fun createDialog(): Dialog {
+            val dialog = Dialog(itemView.context)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.dialog_layout)
+            return dialog
+        }
+
+        private fun setupDialogViews(dialog: Dialog, item: ShoppingList) {
+            val dialogName: TextView = dialog.findViewById(R.id.dialogname)
+            dialogName.text = item.name
+        }
+
+        private fun setListeners(dialog: Dialog) {
+            val renameLayout: LinearLayout = dialog.findViewById(R.id.layoutRename)
+            val resetLayout: LinearLayout = dialog.findViewById(R.id.layoutReset)
+            val deleteLayout: LinearLayout = dialog.findViewById(R.id.layoutDelete)
+
+            renameLayout.setOnClickListener {
+                dialog.dismiss()
+                fragmentNavigation.setRenameListFragment(shoppingLists[absoluteAdapterPosition])
+            }
+
+            resetLayout.setOnClickListener {
+                dialog.dismiss()
+                clearShoppingListFlags(absoluteAdapterPosition)
+            }
+
+            deleteLayout.setOnClickListener {
+                dialog.dismiss()
+                deleteShoppingList(absoluteAdapterPosition)
             }
         }
 
-        private fun showPopupMenu(view: View) {
-            val popupMenu = PopupMenu(view.context, view)
-            popupMenu.inflate(R.menu.menu_popup)
-            popupMenu.setOnMenuItemClickListener(this)
-            popupMenu.show()
-        }
-
-        override fun onMenuItemClick(item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.menu_rename -> {
-                    fragmentNavigation.setUpdateNameFragment(shoppingLists[absoluteAdapterPosition])
-                    true
-                }
-                R.id.menu_reset -> {
-                    clearShoppingListFlags(absoluteAdapterPosition)
-                    true
-                }
-                R.id.menu_delete -> {
-                    deleteShoppingList(absoluteAdapterPosition)
-                    true
-                }
-                else -> false
-            }
+        private fun showDialogWithAnimation(dialog: Dialog) {
+            dialog.show()
+            dialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+            dialog.window?.setGravity(Gravity.BOTTOM)
         }
     }
     private fun deleteShoppingList(position: Int) {
