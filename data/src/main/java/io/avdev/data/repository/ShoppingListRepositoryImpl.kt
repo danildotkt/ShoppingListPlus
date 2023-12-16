@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.map
 
 class ShoppingListRepositoryImpl(
     private val dao: ShoppingListDao,
-    private val mapper : ShoppingListMapper) : ShoppingListRepository{
+    private val mapper: ShoppingListMapper
+) : ShoppingListRepository {
 
     override suspend fun createShoppingList(list: ShoppingList) {
         val entity = mapper.mapToEntity(list)
@@ -25,7 +26,7 @@ class ShoppingListRepositoryImpl(
         dao.deleteShoppingList(entity)
     }
 
-    override suspend fun renameShoppingList(id : Int, newName : String) {
+    override suspend fun renameShoppingList(id: Int, newName: String) {
         dao.renameShoppingList(id, newName)
     }
 }

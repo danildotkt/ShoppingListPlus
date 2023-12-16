@@ -5,4 +5,63 @@
     <string name="rename">Rename</string>
     <string name="reset">Reset</string>
     <string name="share">Share</string>
+    <string name="milk">Milk</string>
+    <string name="eggs">Eggs</string>
+    <string name="bread">Bread</string>
+    <string name="butter">Butter</string>
+    <string name="sugar">Sugar</string>
+    <string name="flour">Flour</string>
+    <string name="tea">Tea</string>
+    <string name="coffee">Coffee</string>
+    <string name="rice">Rice</string>
+    <string name="buckwheat">Buckwheat</string>
+    <string name="potatoes">Potatoes</string>
+    <string name="onion">Onion</string>
+    <string name="carrot">Carrot</string>
+    <string name="cabbage">Cabbage</string>
+    <string name="cottagecheese">Cottage cheese</string>
+    <string name="cheese">Cheese</string>
+    <string name="kefir">Kefir</string>
+    <string name="sourcream">Sour cream</string>
+    <string name="dumplings">Dumplings</string>
+    <string name="sausage">Sausage</string>
+    <string name="bananas">Bananas</string>
+    <string name="apples">Apples</string>
+    <string name="plums">Plums</string>
+    <string name="curdsnack">Curd snack</string>
+    <string name="chips">Chips</string>
+    <string name="cola">Cola</string>
+    <string name="crackers">Crackers</string>
+
+    <string-array name="product_names">
+        <item>@string/milk</item>
+        <item>@string/eggs</item>
+        <item>@string/bread</item>
+        <item>@string/butter</item>
+        <item>@string/sugar</item>
+        <item>@string/flour</item>
+        <item>@string/tea</item>
+        <item>@string/coffee</item>
+        <item>@string/rice</item>
+        <item>@string/buckwheat</item>
+        <item>@string/potatoes</item>
+        <item>@string/onion</item>
+        <item>@string/carrot</item>
+        <item>@string/cabbage</item>
+        <item>@string/cottagecheese</item>
+        <item>@string/cheese</item>
+        <item>@string/kefir</item>
+        <item>@string/sourcream</item>
+        <item>@string/dumplings</item>
+        <item>@string/sausage</item>
+        <item>@string/bananas</item>
+        <item>@string/apples</item>
+        <item>@string/plums</item>
+        <item>@string/curdsnack</item>
+        <item>@string/chips</item>
+        <item>@string/cola</item>
+        <item>@string/crackers</item>
+    </string-array>
+
+
 </resources>

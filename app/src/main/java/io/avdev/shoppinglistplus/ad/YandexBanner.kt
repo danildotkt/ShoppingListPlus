@@ -16,33 +16,40 @@ import io.avdev.shoppinglistplus.ad.ConstAd.YANDEX_BANNER
 import io.avdev.shoppinglistplus.databinding.FragmentYandexBannerBinding
 
 
-class YandexBanner : Fragment(){
+class YandexBanner : Fragment() {
 
-    private lateinit var binding: FragmentYandexBannerBinding
+    private var _binding: FragmentYandexBannerBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentYandexBannerBinding.inflate(inflater, container, false)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentYandexBannerBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeYandexBanner()
     }
 
-    private fun initializeYandexBanner() = with(binding.yandexBanner){
+    private fun initializeYandexBanner() = with(binding.yandexBanner) {
         setAdUnitId(YANDEX_BANNER)
         setAdSize(BannerAdSize.stickySize(context, 450))
-        val adRequest = AdRequest.Builder().setPreferredTheme(AdTheme.LIGHT).build()
+        val adRequest = AdRequest.Builder().setPreferredTheme(AdTheme.DARK).build()
         loadAd(adRequest)
         bannerEventListener()
     }
 
-    private fun bannerEventListener() = with(binding.yandexBanner){
+    private fun bannerEventListener() = with(binding.yandexBanner) {
         setBannerAdEventListener(object : BannerAdEventListener {
             override fun onAdLoaded() {
             }
 
-            override fun onAdFailedToLoad(error : AdRequestError) {
+            override fun onAdFailedToLoad(error: AdRequestError) {
                 Log.i("adlog", "Yandex banner error : ${error.description}")
             }
 
@@ -59,5 +66,11 @@ class YandexBanner : Fragment(){
             }
 
         })
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

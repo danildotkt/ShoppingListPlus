@@ -1,34 +1,14 @@
 package io.avdev.shoppinglistplus.ui.createlist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import io.avdev.domain.model.ShoppingList
 import io.avdev.domain.usecase.list.CreateListUseCase
-import io.avdev.shoppinglistplus.adapter.SListAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CreateListViewModel @AssistedInject constructor(
-    private val createListUseCase: CreateListUseCase,
-    private val adapter : SListAdapter) : ViewModel() {
+class CreateListViewModel(private val createListUseCase: CreateListUseCase) : ViewModel() {
 
-    @AssistedFactory
-    interface Factory {
-        fun create() : CreateListViewModel
-    }
-
-    companion object {
-        fun provideCreateListViewModel(factory : Factory) : ViewModelProvider.Factory {
-            return object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return factory.create() as T
-                }
-            }
-        }
-    }
 
     fun createShoppingList(name : String) {
         val newName = nameValidate(name)
@@ -44,7 +24,7 @@ class CreateListViewModel @AssistedInject constructor(
     }
 
     private fun nameValidate(name : String) : String{
-        if(name == "") {
+        if(name.isBlank()) {
             return "Список покупок + "
         }
         return name

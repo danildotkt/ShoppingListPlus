@@ -12,7 +12,8 @@ class ShoppingListPlusApplication : Application() {
         super.onCreate()
         initMobileAds()
     }
-    private fun initMobileAds (){
+
+    private fun initMobileAds() {
         MobileAds.initialize(this) {
             Log.i("adlog", "ad sdk is initialize")
         }

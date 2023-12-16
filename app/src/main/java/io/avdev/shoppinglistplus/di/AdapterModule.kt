@@ -5,11 +5,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.avdev.domain.usecase.item.ClearSelectionUseCase
-import io.avdev.domain.usecase.item.GetSelectedItemCountUseCase
-import io.avdev.domain.usecase.item.GetTotalItemCountUseCase
+import io.avdev.domain.usecase.item.GetProductsByListIdUseCase
+import io.avdev.domain.usecase.item.GetSelectedProductCountUseCase
+import io.avdev.domain.usecase.item.GetTotalProductCountUseCase
 import io.avdev.domain.usecase.list.DeleteListUseCase
 import io.avdev.domain.usecase.list.GetListsUseCase
-import io.avdev.shoppinglistplus.adapter.SListAdapter
+import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
 import javax.inject.Singleton
 
 
@@ -20,12 +21,19 @@ object AdapterModule {
     @Singleton
     fun provideListAdapter(
         getListUseCase: GetListsUseCase,
-        getSelectedItemCountUseCase: GetSelectedItemCountUseCase,
-        getTotalItemCountUseCase: GetTotalItemCountUseCase,
+        getSelectedProductCountUseCase: GetSelectedProductCountUseCase,
+        getTotalProductCountUseCase: GetTotalProductCountUseCase,
         deleteListUseCase: DeleteListUseCase,
-        clearSelectionUseCase: ClearSelectionUseCase) : SListAdapter {
-
-        return SListAdapter(getListUseCase, getSelectedItemCountUseCase,
-            getTotalItemCountUseCase, deleteListUseCase, clearSelectionUseCase)
+        clearSelectionUseCase: ClearSelectionUseCase,
+        getProductsByListIdUseCase: GetProductsByListIdUseCase
+    ): ShoppingListAdapter {
+        return ShoppingListAdapter(
+            getListUseCase,
+            getSelectedProductCountUseCase,
+            getTotalProductCountUseCase,
+            deleteListUseCase,
+            clearSelectionUseCase,
+            getProductsByListIdUseCase
+        )
     }
 }

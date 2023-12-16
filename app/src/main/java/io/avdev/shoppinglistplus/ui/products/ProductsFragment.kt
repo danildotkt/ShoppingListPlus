@@ -6,30 +6,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
-import io.avdev.domain.usecase.item.CreateItemUseCase
-import io.avdev.shoppinglistplus.adapter.ItemAdapter
+import io.avdev.shoppinglistplus.adapter.ProductAdapter
 import io.avdev.shoppinglistplus.databinding.FragmentProductsBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductsFragment(var shoppingList : ShoppingList) : Fragment() {
-    private var _binding : FragmentProductsBinding? = null
-    private lateinit var itemAdapter : ItemAdapter
-    @Inject lateinit var createItemUseCase : CreateItemUseCase
-    @Inject lateinit var factory : ProductsViewModel.Factory
-    private val viewModel: ProductsViewModel by viewModels {
-        ProductsViewModel.providesProductsViewModel(factory)
-    }
+class ProductsFragment(var shoppingList: ShoppingList) : Fragment() {
+    private var _binding: FragmentProductsBinding? = null
+    private var _viewModel: ProductsViewModel? = null
+    private lateinit var productAdapter: ProductAdapter
+    @Inject
+    lateinit var factory: ProductsViewModelFactory
+
 
     private val binding get() = _binding!!
+    private val viewModel get() = _viewModel!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
+        _viewModel = ViewModelProvider(this, factory)[ProductsViewModel::class.java]
         return binding.root
     }
 
@@ -38,11 +41,12 @@ class ProductsFragment(var shoppingList : ShoppingList) : Fragment() {
         initRcView()
         onClickDone()
     }
+
     private fun onClickDone() = with(binding) {
         etProduct.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val productName = etProduct.text.toString()
-                itemAdapter.addItem(productName)
+                productAdapter.addProduct(productName)
                 etProduct.text = null
                 true
             } else {
@@ -51,16 +55,15 @@ class ProductsFragment(var shoppingList : ShoppingList) : Fragment() {
         }
     }
 
-    private fun initRcView() = with(binding){
+    private fun initRcView() = with(binding) {
         rcProducts.layoutManager = LinearLayoutManager(context)
-        itemAdapter = viewModel.provideItemAdapter(this@ProductsFragment)
-        rcProducts.adapter = itemAdapter
-        val itemAnimator = DefaultItemAnimator()
-        rcProducts.itemAnimator = itemAnimator
+        productAdapter = viewModel.provideItemAdapter(this@ProductsFragment)
+        rcProducts.adapter = productAdapter
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _viewModel = null
     }
 }

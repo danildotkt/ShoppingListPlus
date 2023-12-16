@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:fontFamily="@font/roboto"
-        android:paddingBottom="15dp"
+        android:paddingBottom="10dp"
         android:text="Name"
         android:textAlignment="center"
         android:textColor="@color/textColor"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -23,7 +23,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
+        android:padding="14dp"
         >
         <ImageView
             android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
+        android:padding="14dp"
         >
         <ImageView
             android:layout_width="wrap_content"
@@ -63,11 +63,34 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutShare"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="14dp"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share"
+            android:contentDescription="@string/share" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/share"
+            android:textColor="@color/textColor"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layoutDelete"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp"
+        android:padding="14dp"
         >
         <ImageView
             android:layout_width="wrap_content"

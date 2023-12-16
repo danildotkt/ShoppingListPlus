@@ -14,11 +14,11 @@ interface ShoppingListDao {
     fun insertShoppingList(shoppingListEntity: ShoppingListEntity)
 
     @Query("Select * from lists")
-    fun getShoppingLists() : Flow<List<ShoppingListEntity>>
+    fun getShoppingLists(): Flow<List<ShoppingListEntity>>
 
     @Delete
     fun deleteShoppingList(shoppingListEntity: ShoppingListEntity)
 
     @Query("Update lists set name = :newName where id = :id")
-    fun renameShoppingList(id : Int, newName : String)
+    fun renameShoppingList(id: Int, newName: String)
 }
