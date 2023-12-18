@@ -1,5 +1,6 @@
 package io.avdev.shoppinglistplus.ui.shoppinglist
 
+import ShoppingListViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.avdev.shoppinglistplus.ad.YandexBanner

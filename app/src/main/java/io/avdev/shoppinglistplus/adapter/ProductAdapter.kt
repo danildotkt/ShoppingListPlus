@@ -30,6 +30,14 @@ class ProductAdapter(
     private var unselectedProducts = mutableListOf<Product>()
     private var selectedProducts = mutableListOf<Product>()
 
+    private var _rcView: RecyclerView? = null
+
+    private val rcView get() = _rcView!!
+
+    fun setRcView(rcView: RecyclerView) {
+        this._rcView = rcView
+    }
+
     init {
         CoroutineScope(Dispatchers.IO).launch {
             val listId = fragment.shoppingList.id
@@ -46,14 +54,13 @@ class ProductAdapter(
 
 
     fun addProduct(productName: String) {
+        val newProduct = createProduct(productName)
+        unselectedProducts.add(newProduct)
+        val index = unselectedProducts.indexOf(newProduct)
+        notifyItemInserted(index)
+        rcView.smoothScrollToPosition(unselectedProducts.size - 1)
         CoroutineScope(Dispatchers.Default).launch {
-            val newProduct = createProduct(productName)
             createProductUseCase.execute(newProduct)
-            withContext(Dispatchers.Main) {
-                unselectedProducts.add(newProduct)
-                val index = unselectedProducts.indexOf(newProduct)
-                notifyItemInserted(index)
-            }
         }
     }
 
@@ -65,7 +72,7 @@ class ProductAdapter(
         return Product(
             id = generateId(),
             listId = fragment.shoppingList.id,
-            name = finalProductName
+            name = finalProductName,
         )
     }
 
@@ -84,6 +91,10 @@ class ProductAdapter(
 
     inner class Holder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemProductBinding.bind(view)
+
+        init {
+            setIsRecyclable(false)
+        }
 
         fun bind(item: Product) {
             setupText(item)
@@ -120,6 +131,7 @@ class ProductAdapter(
                 checkBox2.setOnCheckedChangeListener(null)
                 checkBox2.isChecked = item.isSelected
                 checkBox2.setOnCheckedChangeListener { _, isChecked ->
+                    item.isSelected = isChecked
                     if (isChecked) {
                         handleCheckBoxChecked(item)
                     } else {
@@ -140,21 +152,24 @@ class ProductAdapter(
             setProductTextUnselected()
             updateProductSelection(item, false)
         }
-    }
 
-    private fun selectProduct(item : Product) {
-        val from = unselectedProducts.indexOf(item)
-        val to = unselectedProducts.size - 1
-        unselectedProducts.remove(item)
-        selectedProducts.add(0, item)
-        notifyItemMoved(from, to)
-    }
-    private fun unselectProduct(item : Product) {
-        val from = unselectedProducts.size+ selectedProducts.indexOf(item)
-        val to = unselectedProducts.size
-        selectedProducts.remove(item)
-        unselectedProducts.add(item)
-        notifyItemMoved(from, to)
+
+        private fun selectProduct(item: Product) {
+            val from = unselectedProducts.indexOf(item)
+            unselectedProducts.remove(item)
+            selectedProducts.add(0, item)
+            val to = unselectedProducts.size
+            notifyItemMoved(from, to)
+            rcView.scrollToPosition(from)
+        }
+
+        private fun unselectProduct(item: Product) {
+            val from = unselectedProducts.size + selectedProducts.indexOf(item)
+            val to = unselectedProducts.size
+            selectedProducts.remove(item)
+            unselectedProducts.add(item)
+            notifyItemMoved(from, to)
+        }
     }
 
     private fun updateProductSelection(product: Product, isSelected: Boolean) {

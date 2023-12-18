@@ -1,5 +1,7 @@
 package io.avdev.shoppinglistplus.ui.shoppinglist
 
+import ShoppingListViewModel
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -26,7 +28,7 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel!!
 
-    val onBackPressedCallback = object : OnBackPressedCallback(true) {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             handleBackButtonPress()
         }
@@ -39,9 +41,9 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
         setContentView(binding.root)
         setMainFragment()
         setBanner()
-//        viewModel.showInterstitialAd(this)
         viewModel.adapter.setOnAddElementClickListener(this)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.background)))
     }
 
     private fun setMainFragment() {
@@ -84,7 +86,7 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
         if (currentFragment is MainFragment) {
             counter++
             if (counter == 1) {
-                Toast.makeText(this, "Нажмите еще раз, чтобы выйти", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, this.getText(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
             } else if (counter == 2) {
                 finish()
                 counter = 0
@@ -97,12 +99,12 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
 
     override fun onPause() {
         super.onPause()
-//        viewModel.resumeInterstitialAd(this)
+        viewModel.stopInterstitialAdTimer()
     }
 
     override fun onResume() {
         super.onResume()
-//        viewModel.stopInterstitialAdTimer()
+        viewModel.resumeInterstitialAd(this)
     }
 
     override fun onDestroy() {

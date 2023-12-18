@@ -1,39 +1,39 @@
-package io.avdev.shoppinglistplus.ui.shoppinglist
-
+import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import io.avdev.shoppinglistplus.ad.YandexBanner
 import io.avdev.shoppinglistplus.ad.YandexInterstitialAd
 import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
+import io.avdev.shoppinglistplus.ui.shoppinglist.ShoppingListActivity
 
 class ShoppingListViewModel(
     val banner: YandexBanner,
     val interstitialAd: YandexInterstitialAd,
     val adapter: ShoppingListAdapter
 ) : ViewModel() {
+    private var interval = 0
+    private var interstitialAdTimer: CountDownTimer? = null
+    val adTime = 4 * 60 * 1000
+    private var savedInterval: Long = 0
 
-//    private lateinit var interstitialAdTimer: CountDownTimer
-//    private var remainingTime: Long = 0
-//
-//    fun showInterstitialAd(activity: ShoppingListActivity) {
-//        val interval: Long = 5 * 60 * 1000
-//        interstitialAdTimer = object : CountDownTimer(interval - remainingTime, interval) {
-//            override fun onTick(millisUntilFinished: Long) {
-//                remainingTime = millisUntilFinished
-//            }
-//
-//            override fun onFinish() {
-//                interstitialAd.loadInterstitialAd(activity)
-//                remainingTime = 0
-//                start()
-//            }
-//        }.start()
-//    }
-//
-//    fun stopInterstitialAdTimer() {
-//        interstitialAdTimer.cancel()
-//    }
-//
-//    fun resumeInterstitialAd(activity: ShoppingListActivity) {
-//        showInterstitialAd(activity)
-//    }
+    private fun showInterstitialAd(activity: ShoppingListActivity) {
+        interstitialAdTimer = object : CountDownTimer(adTime - savedInterval, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                interval += 1000
+                savedInterval = interval.toLong()
+            }
+            override fun onFinish() {
+                interstitialAd.loadInterstitialAd(activity)
+                interval = 0
+                savedInterval = 0
+            }
+        }.start()
+    }
+
+    fun stopInterstitialAdTimer() {
+        interstitialAdTimer?.cancel()
+    }
+
+    fun resumeInterstitialAd(activity: ShoppingListActivity) {
+        showInterstitialAd(activity)
+    }
 }

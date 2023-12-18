@@ -21,7 +21,6 @@ class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
     @Inject
     lateinit var factory: RenameListViewModelFactory
 
-
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel!!
 
@@ -48,7 +47,7 @@ class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
 
     private fun onClickCreate() = with(binding) {
         buttonRenameList.setOnClickListener {
-            viewModel.renameList(etListRename.text.toString(), shoppingList)
+            viewModel.renameList(etListRename.text.toString(), shoppingList, requireContext())
             moveToStartFragment()
         }
     }
@@ -57,7 +56,7 @@ class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
         binding.etListRename.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val newName = binding.etListRename.text.toString()
-                viewModel.renameList(newName, shoppingList)
+                viewModel.renameList(newName, shoppingList, requireContext())
                 moveToStartFragment()
                 true
             } else {

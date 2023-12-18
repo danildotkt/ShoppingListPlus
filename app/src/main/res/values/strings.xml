@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">ShoppingListPlus</string>
+    <string name="app_name">Shopping list plus</string>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="reset">Reset</string>
     <string name="share">Share</string>
+
+    <string name="new_list_plus">+ New list </string>
+    <string name="shopping_list_plus">Shopping list +</string>
+    <string name="create">Create</string>
+    <string name="new_product">New product +</string>
+    <string name="new_shopping_list_plus">New shopping list +</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+
+
     <string name="milk">Milk</string>
     <string name="eggs">Eggs</string>
     <string name="bread">Bread</string>

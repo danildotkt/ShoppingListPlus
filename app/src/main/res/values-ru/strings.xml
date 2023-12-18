@@ -4,6 +4,15 @@
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
     <string name="reset">Сбросить</string>
+
+    <string name="new_list_plus">+ Новый список</string>
+    <string name="shopping_list_plus">Список покупок +</string>
+    <string name="create">Создать</string>
+    <string name="new_product">Новый продукт +</string>
+    <string name="new_shopping_list_plus">Новый список покупок +</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+
+
     <string name="share">Поделиться</string>
     <string name="milk">Молоко</string>
     <string name="eggs">Яйца</string>

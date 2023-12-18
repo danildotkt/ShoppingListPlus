@@ -61,7 +61,7 @@ class CreateListFragment : Fragment() {
     }
     private fun handleListCreation() {
         val newName = binding.etListName.text.toString()
-        viewModel.createShoppingList(newName)
+        viewModel.createShoppingList(newName, requireContext())
         moveToStartFragment()
     }
 

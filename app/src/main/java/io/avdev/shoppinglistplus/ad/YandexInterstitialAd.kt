@@ -8,7 +8,7 @@ import com.yandex.mobile.ads.common.AdTheme
 import com.yandex.mobile.ads.interstitial.InterstitialAd
 import com.yandex.mobile.ads.interstitial.InterstitialAdLoadListener
 import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
-import io.avdev.shoppinglistplus.ad.ConstAd.YANDEX_INTERSTITIAL
+import io.avdev.shoppinglistplus.ad.ConstAd.YANDEX_INTERSTITIAL_APPGALERY
 
 class YandexInterstitialAd {
     fun loadInterstitialAd(activity: Activity) {
@@ -26,7 +26,7 @@ class YandexInterstitialAd {
             })
         }
         loader.loadAd(
-            AdRequestConfiguration.Builder(YANDEX_INTERSTITIAL)
+            AdRequestConfiguration.Builder(YANDEX_INTERSTITIAL_APPGALERY)
                 .setPreferredTheme(AdTheme.DARK)
                 .build()
         )

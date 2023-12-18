@@ -11,7 +11,7 @@ class ProductsViewModel (
     private val createProductUseCase: CreateProductUseCase,
     private val updateItemUseCase: UpdateProductSelectionUseCase): ViewModel() {
 
-    fun provideItemAdapter(fragment : ProductsFragment) : ProductAdapter{
+    fun provideProductAdapter(fragment : ProductsFragment) : ProductAdapter{
         return ProductAdapter(getProductsByListIdUseCase, fragment, updateItemUseCase, createProductUseCase)
     }
 }

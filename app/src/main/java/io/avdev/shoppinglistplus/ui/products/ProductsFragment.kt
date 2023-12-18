@@ -19,9 +19,9 @@ class ProductsFragment(var shoppingList: ShoppingList) : Fragment() {
     private var _binding: FragmentProductsBinding? = null
     private var _viewModel: ProductsViewModel? = null
     private lateinit var productAdapter: ProductAdapter
+
     @Inject
     lateinit var factory: ProductsViewModelFactory
-
 
     private val binding get() = _binding!!
     private val viewModel get() = _viewModel!!
@@ -57,7 +57,9 @@ class ProductsFragment(var shoppingList: ShoppingList) : Fragment() {
 
     private fun initRcView() = with(binding) {
         rcProducts.layoutManager = LinearLayoutManager(context)
-        productAdapter = viewModel.provideItemAdapter(this@ProductsFragment)
+        val adapter = viewModel.provideProductAdapter(this@ProductsFragment)
+        adapter.setRcView(rcProducts)
+        productAdapter = adapter
         rcProducts.adapter = productAdapter
     }
 
