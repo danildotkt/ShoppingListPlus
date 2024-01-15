@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import io.avdev.domain.model.Product
 import io.avdev.domain.usecase.item.CreateProductUseCase
@@ -14,7 +15,7 @@ import io.avdev.domain.usecase.item.UpdateProductSelectionUseCase
 import io.avdev.shoppinglistplus.R
 import io.avdev.shoppinglistplus.databinding.ItemProductBinding
 import io.avdev.shoppinglistplus.ui.products.ProductsFragment
-import kotlinx.coroutines.CoroutineScope
+import io.avdev.shoppinglistplus.ui.products.ProductsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +24,7 @@ import kotlinx.coroutines.withContext
 class ProductAdapter(
     getProductsByListIdUseCase: GetProductsByListIdUseCase,
     private val fragment: ProductsFragment,
+    private val viewModel: ProductsViewModel,
     private val updateProductSelectionUseCase: UpdateProductSelectionUseCase,
     private val createProductUseCase: CreateProductUseCase
 ) : RecyclerView.Adapter<ProductAdapter.Holder>() {
@@ -39,7 +41,7 @@ class ProductAdapter(
     }
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModel.viewModelScope.launch(Dispatchers.Default) {
             val listId = fragment.shoppingList.id
             val items = getProductsByListIdUseCase.execute(listId)
             unselectedProducts.addAll(items.filter { !it.isSelected }
@@ -59,7 +61,7 @@ class ProductAdapter(
         val index = unselectedProducts.indexOf(newProduct)
         notifyItemInserted(index)
         rcView.smoothScrollToPosition(unselectedProducts.size - 1)
-        CoroutineScope(Dispatchers.Default).launch {
+        viewModel.viewModelScope.launch(Dispatchers.Default) {
             createProductUseCase.execute(newProduct)
         }
     }
@@ -173,7 +175,7 @@ class ProductAdapter(
     }
 
     private fun updateProductSelection(product: Product, isSelected: Boolean) {
-        CoroutineScope(Dispatchers.Default).launch {
+        viewModel.viewModelScope.launch(Dispatchers.Default) {
             updateProductSelectionUseCase.execute(product.id, isSelected)
         }
     }

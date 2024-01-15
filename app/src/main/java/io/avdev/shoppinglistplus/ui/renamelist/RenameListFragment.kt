@@ -10,11 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.databinding.FragmentRenameListBinding
-import io.avdev.shoppinglistplus.utils.extensions.moveToStartFragment
+import io.avdev.shoppinglistplus.utils.extensions.moveToMainFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
+class RenameListFragment(private val shoppingList: ShoppingList) : Fragment() {
     private var _binding: FragmentRenameListBinding? = null
     private var _viewModel: RenameListViewModel? = null
 
@@ -48,7 +48,7 @@ class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
     private fun onClickCreate() = with(binding) {
         buttonRenameList.setOnClickListener {
             viewModel.renameList(etListRename.text.toString(), shoppingList, requireContext())
-            moveToStartFragment()
+            moveToMainFragment()
         }
     }
 
@@ -57,7 +57,7 @@ class RenameListFragment(val shoppingList: ShoppingList) : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val newName = binding.etListRename.text.toString()
                 viewModel.renameList(newName, shoppingList, requireContext())
-                moveToStartFragment()
+                moveToMainFragment()
                 true
             } else {
                 false

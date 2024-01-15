@@ -140,7 +140,7 @@ class ShoppingListAdapter(
             val itemListJob = CoroutineScope(Dispatchers.Default).async {
                 getItemListText(shoppingLists[position].id)
             }
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 val itemList = itemListJob.await()
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
@@ -235,7 +235,6 @@ class ShoppingListAdapter(
             }
         }
     }
-
 }
 
 

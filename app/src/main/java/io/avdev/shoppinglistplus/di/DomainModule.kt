@@ -22,54 +22,42 @@ import io.avdev.domain.usecase.list.RenameListUseCase
 object DomainModule {
 
     @Provides
-    fun provideCreateListUseCase(repository: ShoppingListRepository): CreateListUseCase {
-        return CreateListUseCase(repository)
-    }
+    fun provideCreateListUseCase(repository: ShoppingListRepository): CreateListUseCase =
+        CreateListUseCase(repository)
 
     @Provides
-    fun provideGetListsUseCase(repository: ShoppingListRepository): GetListsUseCase {
-        return GetListsUseCase(repository)
-    }
+    fun provideGetListsUseCase(repository: ShoppingListRepository): GetListsUseCase =
+        GetListsUseCase(repository)
 
     @Provides
-    fun provideDeleteListUseCase(repository: ShoppingListRepository): DeleteListUseCase {
-        return DeleteListUseCase(repository)
-    }
+    fun provideDeleteListUseCase(repository: ShoppingListRepository): DeleteListUseCase =
+        DeleteListUseCase(repository)
 
     @Provides
-    fun provideRenameListUseCase(repository: ShoppingListRepository): RenameListUseCase {
-        return RenameListUseCase(repository)
-    }
-
+    fun provideRenameListUseCase(repository: ShoppingListRepository): RenameListUseCase =
+        RenameListUseCase(repository)
 
     @Provides
-    fun provideCreateProductUseCase(repository: ShoppingProductRepository): CreateProductUseCase {
-        return CreateProductUseCase(repository)
-    }
+    fun provideCreateProductUseCase(repository: ShoppingProductRepository): CreateProductUseCase =
+        CreateProductUseCase(repository)
 
     @Provides
-    fun provideGetProductsByListIdUseCase(repository: ShoppingProductRepository): GetProductsByListIdUseCase {
-        return GetProductsByListIdUseCase(repository)
-    }
+    fun provideGetProductsByListIdUseCase(repository: ShoppingProductRepository): GetProductsByListIdUseCase =
+        GetProductsByListIdUseCase(repository)
 
     @Provides
-    fun provideUpdateProductSelectionUseCase(repository: ShoppingProductRepository): UpdateProductSelectionUseCase {
-        return UpdateProductSelectionUseCase(repository)
-    }
+    fun provideUpdateProductSelectionUseCase(repository: ShoppingProductRepository): UpdateProductSelectionUseCase =
+        UpdateProductSelectionUseCase(repository)
 
     @Provides
-    fun provideClearSelectionUseCase(repository: ShoppingProductRepository): ClearSelectionUseCase {
-        return ClearSelectionUseCase(repository)
-    }
+    fun provideClearSelectionUseCase(repository: ShoppingProductRepository): ClearSelectionUseCase =
+        ClearSelectionUseCase(repository)
 
     @Provides
-    fun provideGetSelectedProductCountUseCase(repository: ShoppingProductRepository): GetSelectedProductCountUseCase {
-        return GetSelectedProductCountUseCase(repository)
-    }
+    fun provideGetSelectedProductCountUseCase(repository: ShoppingProductRepository): GetSelectedProductCountUseCase =
+        GetSelectedProductCountUseCase(repository)
 
     @Provides
-    fun provideGetTotalProductCountUseCase(repository: ShoppingProductRepository): GetTotalProductCountUseCase {
-        return GetTotalProductCountUseCase(repository)
-    }
-
+    fun provideGetTotalProductCountUseCase(repository: ShoppingProductRepository): GetTotalProductCountUseCase =
+        GetTotalProductCountUseCase(repository)
 }

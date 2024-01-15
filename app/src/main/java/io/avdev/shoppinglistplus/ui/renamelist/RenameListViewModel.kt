@@ -18,7 +18,7 @@ class RenameListViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             list.name = newName
             if (newName.isBlank()) {
-                list.name =  context.getString(R.string.new_shopping_list_plus)
+                list.name = context.getString(R.string.new_shopping_list_plus)
 
             }
             renameListUseCase.execute(list.id, list.name)

@@ -13,7 +13,6 @@ import io.avdev.domain.usecase.list.GetListsUseCase
 import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AdapterModule {

@@ -16,6 +16,7 @@ import javax.inject.Inject
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private var _viewModel: MainViewModel? = null
+
     @Inject
     lateinit var factory: MainViewModelFactory
 
@@ -34,6 +35,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initAdapter()
     }
 

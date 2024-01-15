@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -14,8 +14,8 @@ android {
         applicationId = "io.avdev.shoppinglistplus"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,28 +40,23 @@ android {
         viewBinding = true
     }
 }
-val roomVersion = "2.6.1"
-val daggerVersion = "2.48.1"
+
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
+    data()
+    domain()
 
-    implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    room()
+    daggerHilt()
 
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation(Dependencies.yandexMobileAds)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation(Dependencies.fragmentKtx)
+    implementation(Dependencies.lifecycleViewModelKtx)
+    implementation(Dependencies.kotlinxCoroutinesAndroid)
 
-    implementation("com.google.dagger:hilt-android:$daggerVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
-
-    implementation("com.yandex.android:mobileads:6.3.0")
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.appCompat)
+    implementation(Dependencies.recyclerView)
+    implementation(Dependencies.material)
+    implementation(Dependencies.constraintLayout)
 }

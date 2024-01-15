@@ -12,7 +12,7 @@ class ShoppingListViewModel(
 ) : ViewModel() {
     private var interval = 0
     private var interstitialAdTimer: CountDownTimer? = null
-    val adTime = 4 * 60 * 1000
+    val adTime = 3 * 60 * 1000
     private var savedInterval: Long = 0
 
     private fun showInterstitialAd(activity: ShoppingListActivity) {
@@ -21,6 +21,7 @@ class ShoppingListViewModel(
                 interval += 1000
                 savedInterval = interval.toLong()
             }
+
             override fun onFinish() {
                 interstitialAd.loadInterstitialAd(activity)
                 interval = 0
@@ -33,7 +34,7 @@ class ShoppingListViewModel(
         interstitialAdTimer?.cancel()
     }
 
-    fun resumeInterstitialAd(activity: ShoppingListActivity) {
+    fun resumeInterstitialAdTimer(activity: ShoppingListActivity) {
         showInterstitialAd(activity)
     }
 }

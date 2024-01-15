@@ -11,7 +11,7 @@ class ShoppingListViewModelFactory(
     private val banner: YandexBanner,
     private val interstitialAd: YandexInterstitialAd,
     val adapter: ShoppingListAdapter
-    ) : ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ShoppingListViewModel(banner, interstitialAd, adapter) as T

@@ -12,12 +12,9 @@ import io.avdev.shoppinglistplus.ad.YandexInterstitialAd
 object AdModule {
 
     @Provides
-    fun provideYandexBanner(): YandexBanner {
-        return YandexBanner()
-    }
+    fun provideYandexBanner(): YandexBanner = YandexBanner()
 
     @Provides
-    fun provideYandexInterstitial(): YandexInterstitialAd {
-        return YandexInterstitialAd()
-    }
+    fun provideYandexInterstitial(): YandexInterstitialAd =
+        YandexInterstitialAd()
 }

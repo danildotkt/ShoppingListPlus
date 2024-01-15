@@ -26,49 +26,41 @@ object DataModule {
     fun provideShoppingListRepository(
         dao: ShoppingListDao,
         mapper: ShoppingListMapper
-    ): ShoppingListRepository {
-        return ShoppingListRepositoryImpl(dao, mapper)
-    }
+    ): ShoppingListRepository =
+        ShoppingListRepositoryImpl(dao, mapper)
 
     @Provides
     @Singleton
-    fun provideShoppingListDao(database: ShoppingListDatabase): ShoppingListDao {
-        return database.getShoppingListDao()
-    }
+    fun provideShoppingListDao(database: ShoppingListDatabase): ShoppingListDao =
+        database.getShoppingListDao()
 
     @Provides
     @Singleton
-    fun provideShoppingListMapper(): ShoppingListMapper {
-        return ShoppingListMapper()
-    }
+    fun provideShoppingListMapper(): ShoppingListMapper =
+        ShoppingListMapper()
 
     @Provides
     @Singleton
     fun provideShoppingItemRepository(
         dao: ProductDao,
         mapper: ProductMapper
-    ): ShoppingProductRepository {
-        return ProductRepositoryImpl(dao, mapper)
-    }
+    ): ShoppingProductRepository =
+        ProductRepositoryImpl(dao, mapper)
 
     @Provides
     @Singleton
-    fun provideShoppingItemDao(database: ShoppingListDatabase): ProductDao {
-        return database.getShoppingItemDao()
-    }
+    fun provideShoppingItemDao(database: ShoppingListDatabase): ProductDao =
+        database.getShoppingItemDao()
 
     @Provides
     @Singleton
-    fun provideShoppingItemMapper(): ProductMapper {
-        return ProductMapper()
-    }
+    fun provideShoppingItemMapper(): ProductMapper =
+        ProductMapper()
 
     @Provides
     @Singleton
-    fun provideShoppingListDb(@ApplicationContext context: Context): ShoppingListDatabase {
-        return ShoppingListDatabase.getDataBase(context)
-    }
-
+    fun provideShoppingListDb(@ApplicationContext context: Context): ShoppingListDatabase =
+        ShoppingListDatabase.getDataBase(context)
 }
 
 

@@ -21,7 +21,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
-    @Inject lateinit var factory: ShoppingListViewModelFactory
+    @Inject
+    lateinit var factory: ShoppingListViewModelFactory
     private var _binding: ActivityAppBinding? = null
     private var _viewModel: ShoppingListViewModel? = null
     private var counter = 0
@@ -40,8 +41,8 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
         _viewModel = ViewModelProvider(this, factory)[ShoppingListViewModel::class.java]
         setContentView(binding.root)
         setMainFragment()
-        setBanner()
         viewModel.adapter.setOnAddElementClickListener(this)
+        setBanner()
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         supportActionBar?.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.background)))
     }
@@ -86,7 +87,8 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
         if (currentFragment is MainFragment) {
             counter++
             if (counter == 1) {
-                Toast.makeText(this, this.getText(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, this.getText(R.string.press_again_to_exit), Toast.LENGTH_SHORT)
+                    .show()
             } else if (counter == 2) {
                 finish()
                 counter = 0
@@ -104,7 +106,7 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
 
     override fun onResume() {
         super.onResume()
-        viewModel.resumeInterstitialAd(this)
+        viewModel.resumeInterstitialAdTimer(this)
     }
 
     override fun onDestroy() {

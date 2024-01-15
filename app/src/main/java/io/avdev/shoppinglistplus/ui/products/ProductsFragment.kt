@@ -42,25 +42,29 @@ class ProductsFragment(var shoppingList: ShoppingList) : Fragment() {
         onClickDone()
     }
 
-    private fun onClickDone() = with(binding) {
-        etProduct.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val productName = etProduct.text.toString()
-                productAdapter.addProduct(productName)
-                etProduct.text = null
-                true
-            } else {
-                false
+    private fun onClickDone() {
+        binding.apply {
+            etProduct.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val productName = etProduct.text.toString()
+                    productAdapter.addProduct(productName)
+                    etProduct.text = null
+                    true
+                } else {
+                    false
+                }
             }
         }
     }
 
-    private fun initRcView() = with(binding) {
-        rcProducts.layoutManager = LinearLayoutManager(context)
-        val adapter = viewModel.provideProductAdapter(this@ProductsFragment)
-        adapter.setRcView(rcProducts)
-        productAdapter = adapter
-        rcProducts.adapter = productAdapter
+    private fun initRcView() {
+        binding.apply {
+            rcProducts.layoutManager = LinearLayoutManager(context)
+            val adapter = viewModel.provideProductAdapter(this@ProductsFragment)
+            adapter.setRcView(rcProducts)
+            productAdapter = adapter
+            rcProducts.adapter = productAdapter
+        }
     }
 
     override fun onDestroyView() {

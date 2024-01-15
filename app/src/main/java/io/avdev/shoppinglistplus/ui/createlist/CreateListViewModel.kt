@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class CreateListViewModel(private val createListUseCase: CreateListUseCase) : ViewModel() {
 
 
-    fun createShoppingList(name : String, context: Context) {
+    fun createShoppingList(name: String, context: Context) {
         val newName = nameValidate(name, context)
         val shoppingList = ShoppingList(id = generateId(), name = newName)
         viewModelScope.launch(Dispatchers.Default) {
@@ -25,8 +25,8 @@ class CreateListViewModel(private val createListUseCase: CreateListUseCase) : Vi
         }
     }
 
-    private fun nameValidate(name : String, context: Context) : String{
-        if(name.isBlank()) {
+    private fun nameValidate(name: String, context: Context): String {
+        if (name.isBlank()) {
             return context.getString(R.string.shopping_list_plus)
         }
         return name

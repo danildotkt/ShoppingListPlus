@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import io.avdev.shoppinglistplus.adapter.ShoppingListAdapter
 
 
-class MainViewModel(private val shoppingListAdapter: ShoppingListAdapter): ViewModel() {
+class MainViewModel(private val shoppingListAdapter: ShoppingListAdapter) : ViewModel() {
 
-    fun provideListAdapter() : ShoppingListAdapter {
+    fun provideListAdapter(): ShoppingListAdapter {
         return shoppingListAdapter
     }
 }
