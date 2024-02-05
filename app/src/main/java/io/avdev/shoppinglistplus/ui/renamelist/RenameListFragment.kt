@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.databinding.FragmentRenameListBinding
@@ -16,13 +16,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RenameListFragment(private val shoppingList: ShoppingList) : Fragment() {
     private var _binding: FragmentRenameListBinding? = null
-    private var _viewModel: RenameListViewModel? = null
+    private val viewModel by viewModels<RenameListViewModel> { factory }
 
     @Inject
     lateinit var factory: RenameListViewModelFactory
 
     private val binding get() = _binding!!
-    private val viewModel get() = _viewModel!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +29,6 @@ class RenameListFragment(private val shoppingList: ShoppingList) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRenameListBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this, factory)[RenameListViewModel::class.java]
         return binding.root
     }
 
@@ -68,6 +66,5 @@ class RenameListFragment(private val shoppingList: ShoppingList) : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _viewModel = null
     }
 }

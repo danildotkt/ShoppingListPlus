@@ -8,21 +8,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.shoppinglistplus.databinding.FragmentCreateListBinding
 import io.avdev.shoppinglistplus.utils.extensions.moveToMainFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateListFragment() : Fragment() {
+class CreateListFragment : Fragment() {
     private var _binding: FragmentCreateListBinding? = null
-    private var _viewModel: CreateListViewModel? = null
+    private val viewModel by viewModels<CreateListViewModel> { factory }
     @Inject
     lateinit var factory: CreateListViewModelFactory
 
     private val binding get() = _binding!!
-    private val viewModel get() = _viewModel!!
 
 
     override fun onCreateView(
@@ -31,7 +30,6 @@ class CreateListFragment() : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCreateListBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this, factory)[CreateListViewModel::class.java]
         return binding.root
     }
 
@@ -79,6 +77,5 @@ class CreateListFragment() : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _viewModel = null
     }
 }

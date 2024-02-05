@@ -186,11 +186,9 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val item = if (position < unselectedProducts.size) {
-            unselectedProducts[position]
-        } else {
-            selectedProducts[position - unselectedProducts.size]
-        }
+        val item = if (position < unselectedProducts.size) unselectedProducts[position]
+        else selectedProducts[position - unselectedProducts.size]
+
         holder.bind(item)
     }
 

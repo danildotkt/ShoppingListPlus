@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.shoppinglistplus.databinding.FragmentMainBinding
@@ -15,13 +15,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
-    private var _viewModel: MainViewModel? = null
+    private val viewModel by viewModels<MainViewModel> { factory }
 
     @Inject
     lateinit var factory: MainViewModelFactory
 
     private val binding get() = _binding!!
-    private val viewModel get() = _viewModel!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +28,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        _viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
         return binding.root
     }
 
@@ -48,6 +46,5 @@ class MainFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _viewModel = null
     }
 }

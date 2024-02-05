@@ -24,7 +24,6 @@ import io.avdev.shoppinglistplus.databinding.ItemShoppingListBinding
 import io.avdev.shoppinglistplus.utils.listeners.FragmentNavigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
@@ -137,11 +136,11 @@ class ShoppingListAdapter(
         }
 
         private fun shareShoppingList(position: Int) {
-            val itemListJob = CoroutineScope(Dispatchers.Default).async {
-                getItemListText(shoppingLists[position].id)
-            }
-            CoroutineScope(Dispatchers.Default).launch {
-                val itemList = itemListJob.await()
+            CoroutineScope(Dispatchers.Main).launch {
+                val itemList = withContext(Dispatchers.Default) {
+                    getItemListText(shoppingLists[position].id)
+                }
+
                 val sendIntent: Intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, itemList)
@@ -152,6 +151,7 @@ class ShoppingListAdapter(
                 itemView.context.startActivity(shareIntent)
             }
         }
+
     }
 
     private fun deleteShoppingList(position: Int) {
@@ -185,12 +185,14 @@ class ShoppingListAdapter(
 
     inner class AddElementButtonHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    private val VIEW_TYPE_ADD_ELEMENT = 0
-    private val VIEW_TYPE_SHOPPING_LIST = 1
+    enum class ListItemType {
+        ELEMENT_ADD,
+        SHOPPING_LIST
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            VIEW_TYPE_ADD_ELEMENT -> {
+        return when (ListItemType.entries[viewType]) {
+            ListItemType.ELEMENT_ADD -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_newlist, parent, false)
                 val holder = AddElementButtonHolder(view)
@@ -200,7 +202,7 @@ class ShoppingListAdapter(
                 holder
             }
 
-            else -> {
+            ListItemType.SHOPPING_LIST -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_shopping_list, parent, false)
                 val holder = ShoppingListHolder(view)
@@ -213,15 +215,16 @@ class ShoppingListAdapter(
     }
 
 
+
     override fun getItemCount(): Int {
         return shoppingLists.size + 1
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == shoppingLists.size) {
-            VIEW_TYPE_ADD_ELEMENT
+            ListItemType.ELEMENT_ADD.ordinal
         } else {
-            VIEW_TYPE_SHOPPING_LIST
+            ListItemType.SHOPPING_LIST.ordinal
         }
     }
 

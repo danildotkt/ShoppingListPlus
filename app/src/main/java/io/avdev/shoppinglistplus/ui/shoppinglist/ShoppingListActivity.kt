@@ -5,8 +5,8 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import dagger.hilt.android.AndroidEntryPoint
 import io.avdev.domain.model.ShoppingList
 import io.avdev.shoppinglistplus.R
@@ -21,13 +21,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
+    private var _binding: ActivityAppBinding? = null
+    private val viewModel by viewModels<ShoppingListViewModel> { factory }
     @Inject
     lateinit var factory: ShoppingListViewModelFactory
-    private var _binding: ActivityAppBinding? = null
-    private var _viewModel: ShoppingListViewModel? = null
     private var counter = 0
+
     private val binding get() = _binding!!
-    private val viewModel get() = _viewModel!!
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -38,7 +38,6 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAppBinding.inflate(layoutInflater)
-        _viewModel = ViewModelProvider(this, factory)[ShoppingListViewModel::class.java]
         setContentView(binding.root)
         setMainFragment()
         viewModel.adapter.setOnAddElementClickListener(this)
@@ -48,31 +47,36 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     }
 
     private fun setMainFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-            .replace(R.id.fragmentLayout, MainFragment())
-            .commit()
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+            replace(R.id.fragmentLayout, MainFragment())
+            commit()
+        }
     }
 
     override fun setCreateListFragment() {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(R.id.fragmentLayout, CreateListFragment())
-            .commit()
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+            replace(R.id.fragmentLayout, CreateListFragment())
+            commit()
+        }
     }
 
     override fun setProductsFragment(sList: ShoppingList) {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(R.id.fragmentLayout, ProductsFragment(sList))
-            .commit()
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+            replace(R.id.fragmentLayout, ProductsFragment(sList))
+            commit()
+        }
     }
 
     override fun setRenameListFragment(sList: ShoppingList) {
-        supportFragmentManager.beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(R.id.fragmentLayout, RenameListFragment(sList))
-            .commit()
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+            replace(R.id.fragmentLayout, RenameListFragment(sList))
+            commit()
+        }
+
     }
 
     private fun setBanner() {
@@ -112,6 +116,5 @@ class ShoppingListActivity : AppCompatActivity(), FragmentNavigation {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        _viewModel = null
     }
 }

@@ -10,8 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateListViewModel(private val createListUseCase: CreateListUseCase) : ViewModel() {
-
-
+    
     fun createShoppingList(name: String, context: Context) {
         val newName = nameValidate(name, context)
         val shoppingList = ShoppingList(id = generateId(), name = newName)
